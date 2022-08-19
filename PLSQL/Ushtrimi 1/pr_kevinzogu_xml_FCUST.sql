@@ -34,7 +34,7 @@ NLS_CHARSET_ID ('UTF8')
    end loop;
    
 EXCEPTION
-  -- when no data found 
+  -- when no data found prit it
   WHEN no_data_found THEN
     dbms_output.put_line('No data found');
     -- when others print the error message
