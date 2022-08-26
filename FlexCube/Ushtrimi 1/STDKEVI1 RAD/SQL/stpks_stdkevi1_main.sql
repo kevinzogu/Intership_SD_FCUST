@@ -1765,11 +1765,30 @@ WHERE group_code = p_Wrk_stdkevi1.v_tab_stdkevi1.group_code
                               p_Err_Params        IN OUT VARCHAR2)
    RETURN BOOLEAN IS
 
+      l_Summary_Rec     TAB_STDKEVI1%ROWTYPE;
       l_Summary_Rec_Found BOOLEAN := TRUE;
    BEGIN
 
       Dbg('In Fn_Populate_Record_Master..');
 
+      IF  p_Action_Code IN (Cspks_Req_Global.p_New,Cspks_Req_Global.p_Modify,Cspks_Req_Global.p_Close,Cspks_Req_Global.p_Reopen) THEN
+         Dbg('Populating Record Master ..');
+         IF g_Key_Id IS NOT NULL THEN
+            l_Summary_Rec := p_stdkevi1.v_tab_stdkevi1;
+            IF l_Summary_Rec_Found THEN
+               Dbg('Summary Record Found..');
+               p_Record_Master.Key_Id := g_Key_Id;
+               p_Record_Master.AUTH_STAT := l_Summary_Rec.AUTH_STAT;
+               p_Record_Master.RECORD_STAT := l_Summary_Rec.RECORD_STAT;
+               p_Record_Master.CHAR_FLD_1 := l_Summary_Rec.EXPOSURE_CATEGORY;
+               p_Record_Master.CHAR_FLD_2 := l_Summary_Rec.GROUP_CODE;
+               p_Record_Master.CHAR_FLD_3 := l_Summary_Rec.GROUP_STATUS;
+               p_Record_Master.CHAR_FLD_4 := l_Summary_Rec.GROUP_TYPE;
+               p_Record_Master.DATE_FLD_1 := l_Summary_Rec.SINCE;
+               p_Record_Master.CHAR_FLD_5 := l_Summary_Rec.TAB_DESCRIPTION;
+            END IF;
+         END IF;
+      END IF;
 
       Dbg('Returning Success From Fn_Populate_Record_Master..');
       RETURN TRUE;

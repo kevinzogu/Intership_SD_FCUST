@@ -28,7 +28,7 @@
 ****************************************************************************************************************************/
 
 //***** Code for criteria Search *****
-var criteriaSearch  = '';
+var criteriaSearch  = 'N';
 //----------------------------------------------------------------------------------------------------------------------
 //***** FCJ XML FOR THE SCREEN *****
 //----------------------------------------------------------------------------------------------------------------------
@@ -49,6 +49,23 @@ var strScreenName = "CVS_MAIN";
 var qryReqd = "Y";
 var txnBranchFld = "" ;
 var originSystem = "";
+//----------------------------------------------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------------------------------------------
+//***** FCJ XML FOR SUMMARY SCREEN *****
+//----------------------------------------------------------------------------------------------------------------------
+var msgxml_sum=""; 
+msgxml_sum += '    <FLD>'; 
+msgxml_sum += '      <FN PARENT="" RELATION_TYPE="1" TYPE="BLK_MAIN">AUTHSTAT~TXNSTAT~EXPOSURE_CATEGORY~GROUP_CODE~GROUP_STATUS~GROUP_TYPE~SINCE~TAB_DESCRIPTION</FN>'; 
+msgxml_sum += '    </FLD>'; 
+
+var detailFuncId = "STDKEVI1";
+var defaultWhereClause = "";
+var defaultOrderByClause ="";
+var multiBrnWhereClause ="";
+var g_SummaryType ="S";
+var g_SummaryBtnCount =0;
+var g_SummaryBlock ="BLK_MAIN";
 //----------------------------------------------------------------------------------------------------------------------
 //***** CODE FOR DATABINDING *****
 //----------------------------------------------------------------------------------------------------------------------
@@ -162,6 +179,6 @@ var dpndntOnSrvs = {};
 var callformTabArray = new Array(); 
 //***** CODE FOR ACTION STAGE DETAILS *****
 //----------------------------------------------------------------------------------------------------------------------
-var actStageArry = {};
+var actStageArry = {"QUERY":"2","NEW":"2","MODIFY":"2","AUTHORIZE":"1","DELETE":"1","CLOSE":"1","REOPEN":"1","REVERSE":"1","ROLLOVER":"1","CONFIRM":"1","LIQUIDATE":"1","SUMMARYQUERY":"2"};
 //***** CODE FOR IMAGE FLDSET *****
 //----------------------------------------------------------------------------------------------------------------------
