@@ -1,0 +1,4 @@
+No Maintenance For Label Codes..
+---------------------------------------------------------------------------------------------------------------
+LBL_COSTUMER_DETAIL_ID
+LBL_COSTUMER_ID
