@@ -88,10 +88,12 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi2_custom AS
    BEGIN
 
       Dbg('In Fn_Pre_Check_Mandatory');
- p_stdkevi2.v_master_stdkevi2.product_id := STDKEVIN1_SEQ.NEXTVAL;
+      if p_Action_Code='NEW' THEN
+         p_stdkevi2.v_master_stdkevi2.product_id := stdkevi2_seq_d.NEXTVAL;
         FOR I IN 1..p_stdkevi2.v_DETAIL_stdkevi2.COUNT LOOP
         p_stdkevi2.v_DETAIL_stdkevi2(I).product_id :=  p_stdkevi2.v_master_stdkevi2.product_id;
        END LOOP;
+       END IF;
       Dbg('Returning Success From Fn_Pre_Check_Mandatory..');
       RETURN TRUE;
    EXCEPTION

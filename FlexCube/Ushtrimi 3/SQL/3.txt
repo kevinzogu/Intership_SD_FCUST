@@ -78,3 +78,18 @@ INSERT INTO STDKEVI3_Customer VALUES ('3','Angry', 'Individual', 'gdshsjhgshdshs
 INSERT INTO STDKEVI3_Customer VALUES ('4','Angry', 'Individual', 'gdsgsfdhdshsdh','Required');
 INSERT INTO STDKEVI3_Customer VALUES ('5','Loyal', 'Individual', 'xcbzxcgdsgshdshsdh','Required');
 INSERT INTO STDKEVI3_Customer VALUES ('6','New', 'Individual', 'bfkasfbkasfb','Required');
+
+
+CREATE SEQUENCE STDKEVI3_SEQ
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 20;
+
+CREATE SEQUENCE STDKEVI3_SEQ_D
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 20;
