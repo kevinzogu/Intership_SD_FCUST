@@ -203,7 +203,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi3_custom AS
       
         SELECT COUNT(*)
           INTO l_count
-          FROM STDKEVI3_Customer
+          FROM master_stdkevi3
          WHERE costumer_type =
                p_Wrk_stdkevi3.v_master_stdkevi3.COSTUMER_TYPE
            AND COSTUMER_CATEGORY =
