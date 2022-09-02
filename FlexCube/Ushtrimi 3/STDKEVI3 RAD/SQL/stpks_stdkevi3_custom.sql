@@ -183,7 +183,9 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi3_custom AS
                                         p_Err_Code         IN OUT VARCHAR2,
                                         p_Err_Params       IN OUT VARCHAR2)
     RETURN BOOLEAN IS
-    l_index NUMBER := 1;
+    l_index NUMBER := 1;    
+    l_count Number := 0;
+    
   BEGIN
   
     Dbg('In Fn_Post_Default_And_Validate..');
@@ -196,19 +198,46 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi3_custom AS
           p_Wrk_stdkevi3.v_master_stdkevi3.COSTUMER_TYPE);
       Dbg(' p_Wrk_stdkevi3.v_master_stdkevi3.COSTUMER_CATEGORY: ' ||
           p_Wrk_stdkevi3.v_master_stdkevi3.COSTUMER_CATEGORY);
-      FOR var IN (SELECT field_description, mandatory_validation
-                    FROM STDKEVI3_Customer
-                   WHERE costumer_type =
-                         p_Wrk_stdkevi3.v_master_stdkevi3.COSTUMER_TYPE
-                     AND COSTUMER_CATEGORY =
-                         p_Wrk_stdkevi3.v_master_stdkevi3.COSTUMER_CATEGORY) LOOP
-        Dbg('inside loop index value : ' || l_index);
-        p_Wrk_stdkevi3.v_detail_stdkevi3(l_index).FIELD_DESCRIPTION := var.field_description;
-        p_Wrk_stdkevi3.v_detail_stdkevi3(l_index).MANDATORY_VALIDATION := var.mandatory_validation;
-        l_index := l_index + 1;
-        Dbg('index value : ' || l_index);
-      END LOOP;
-      Dbg('outside loop index value : ' || l_index);
+    
+      BEGIN
+      
+        SELECT COUNT(*)
+          INTO l_count
+          FROM STDKEVI3_Customer
+         WHERE costumer_type =
+               p_Wrk_stdkevi3.v_master_stdkevi3.COSTUMER_TYPE
+           AND COSTUMER_CATEGORY =
+               p_Wrk_stdkevi3.v_master_stdkevi3.COSTUMER_CATEGORY;
+      
+        Dbg('Count is :  ' || l_count);
+        
+              EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+          dbg('Fail in geting count ');
+          RETURN FALSE;
+      END;
+      
+        IF l_count > 0 THEN
+        dbg('Count greater than 0 category and type are dublicated ');
+         Pr_Log_Error(p_Function_Id,p_Source ,'CS-MAIL08' , Null);
+   
+        
+        ELSE
+          FOR var IN (SELECT field_description, mandatory_validation
+                        FROM STDKEVI3_Customer
+                       WHERE costumer_type =
+                             p_Wrk_stdkevi3.v_master_stdkevi3.COSTUMER_TYPE
+                         AND COSTUMER_CATEGORY =
+                             p_Wrk_stdkevi3.v_master_stdkevi3.COSTUMER_CATEGORY) LOOP
+            Dbg('inside loop index value : ' || l_index);
+            p_Wrk_stdkevi3.v_detail_stdkevi3(l_index).FIELD_DESCRIPTION := var.field_description;
+            p_Wrk_stdkevi3.v_detail_stdkevi3(l_index).MANDATORY_VALIDATION := var.mandatory_validation;
+            l_index := l_index + 1;
+            Dbg('index value : ' || l_index);
+          END LOOP;
+          Dbg('outside loop index value : ' || l_index);
+        END IF;
+    
     END IF;
   
     Dbg('Returning Success From Fn_Post_Default_And_Validate..');
