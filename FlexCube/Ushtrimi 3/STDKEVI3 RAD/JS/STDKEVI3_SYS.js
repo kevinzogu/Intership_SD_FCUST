@@ -88,7 +88,8 @@ pkFields[0] = "BLK_MASTER__COSTUMER_ID";
 //----------------------------------------------------------------------------------------------------------------------
 //***** CODE FOR AMENDABLE/SUBSYSTEM Fields *****
 //----------------------------------------------------------------------------------------------------------------------
-var modifyAmendArr = new Array(); 
+//***** Fields Amendable while Modification *****
+var modifyAmendArr = {"BLK_DETAIL":["FIELD_DESCRIPTION","MANDATORY_VALIDATION"],"BLK_MASTER":["BTN_POPULATE","COSTUMER_CATEGORY","COSTUMER_TYPE"]};
 var closeAmendArr = new Array(); 
 var reopenAmendArr = new Array(); 
 var reverseAmendArr = new Array(); 
@@ -96,7 +97,8 @@ var deleteAmendArr = new Array();
 var rolloverAmendArr = new Array(); 
 var confirmAmendArr = new Array(); 
 var liquidateAmendArr = new Array(); 
-var queryAmendArr = new Array(); 
+//***** Fields Amendable while Query *****
+var queryAmendArr = {"BLK_DETAIL":["FIELD_DESCRIPTION","MANDATORY_VALIDATION"],"BLK_MASTER":["BTN_POPULATE","COSTUMER_CATEGORY","COSTUMER_TYPE"]};
 var authorizeAmendArr = new Array(); 
 //----------------------------------------------------------------------------------------------------------------------
 

@@ -88,7 +88,8 @@ pkFields[0] = "BLK_MASTER__PRODUCT_ID";
 //----------------------------------------------------------------------------------------------------------------------
 //***** CODE FOR AMENDABLE/SUBSYSTEM Fields *****
 //----------------------------------------------------------------------------------------------------------------------
-var modifyAmendArr = new Array(); 
+//***** Fields Amendable while Modification *****
+var modifyAmendArr = {"BLK_DETAIL":["PRODUCT_CODE"],"BLK_MASTER":["PRODUCT_RESCRIPTION","RELATIONSHIP","TAB_CATEGORY","TAB_DESCRIPTION"]};
 var closeAmendArr = new Array(); 
 var reopenAmendArr = new Array(); 
 var reverseAmendArr = new Array(); 
@@ -96,7 +97,8 @@ var deleteAmendArr = new Array();
 var rolloverAmendArr = new Array(); 
 var confirmAmendArr = new Array(); 
 var liquidateAmendArr = new Array(); 
-var queryAmendArr = new Array(); 
+//***** Fields Amendable while Query *****
+var queryAmendArr = {"BLK_DETAIL":["PRODUCT_CODE"],"BLK_MASTER":["PRODUCT_RESCRIPTION","RELATIONSHIP","TAB_CATEGORY","TAB_DESCRIPTION"]};
 var authorizeAmendArr = new Array(); 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -180,6 +182,6 @@ var dpndntOnSrvs = {};
 var callformTabArray = new Array(); 
 //***** CODE FOR ACTION STAGE DETAILS *****
 //----------------------------------------------------------------------------------------------------------------------
-var actStageArry = {};
+var actStageArry = {"QUERY":"2","NEW":"2","MODIFY":"2","AUTHORIZE":"1","DELETE":"1","CLOSE":"1","REOPEN":"1","REVERSE":"1","ROLLOVER":"1","CONFIRM":"1","LIQUIDATE":"1","SUMMARYQUERY":"2"};
 //***** CODE FOR IMAGE FLDSET *****
 //----------------------------------------------------------------------------------------------------------------------

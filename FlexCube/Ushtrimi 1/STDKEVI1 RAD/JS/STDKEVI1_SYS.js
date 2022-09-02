@@ -87,7 +87,8 @@ pkFields[0] = "BLK_MAIN__GROUP_CODE";
 //----------------------------------------------------------------------------------------------------------------------
 //***** CODE FOR AMENDABLE/SUBSYSTEM Fields *****
 //----------------------------------------------------------------------------------------------------------------------
-var modifyAmendArr = new Array(); 
+//***** Fields Amendable while Modification *****
+var modifyAmendArr = {"BLK_MAIN":["EXPOSURE_CATEGORY","GROUP_CODE","GROUP_STATUS","GROUP_TYPE","SINCEI","TAB_DESCRIPTION"]};
 var closeAmendArr = new Array(); 
 var reopenAmendArr = new Array(); 
 var reverseAmendArr = new Array(); 
@@ -95,7 +96,8 @@ var deleteAmendArr = new Array();
 var rolloverAmendArr = new Array(); 
 var confirmAmendArr = new Array(); 
 var liquidateAmendArr = new Array(); 
-var queryAmendArr = new Array(); 
+//***** Fields Amendable while Query *****
+var queryAmendArr = {"BLK_MAIN":["EXPOSURE_CATEGORY","GROUP_CODE","GROUP_STATUS","GROUP_TYPE","SINCEI","TAB_DESCRIPTION"]};
 var authorizeAmendArr = new Array(); 
 //----------------------------------------------------------------------------------------------------------------------
 
