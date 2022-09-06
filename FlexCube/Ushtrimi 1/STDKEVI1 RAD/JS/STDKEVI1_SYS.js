@@ -32,7 +32,7 @@ var criteriaSearch  = 'N';
 //----------------------------------------------------------------------------------------------------------------------
 //***** FCJ XML FOR THE SCREEN *****
 //----------------------------------------------------------------------------------------------------------------------
-var fieldNameArray = {"BLK_MAIN":"EXPOSURE_CATEGORY~GROUP_CODE~GROUP_STATUS~GROUP_TYPE~SINCE~TAB_DESCRIPTION~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH"};
+var fieldNameArray = {"BLK_MAIN":"GROUP_CODE~GROUP_STATUS~GROUP_TYPE~SINCE~TAB_DESCRIPTION~EXPOSURE_CATEGORY~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH"};
 
 var multipleEntryPageSize = {};
 
@@ -42,7 +42,7 @@ var tabMEBlks = {};
 
 var msgxml=""; 
 msgxml += '    <FLD>'; 
-msgxml += '      <FN PARENT="" RELATION_TYPE="1" TYPE="BLK_MAIN">EXPOSURE_CATEGORY~GROUP_CODE~GROUP_STATUS~GROUP_TYPE~SINCE~TAB_DESCRIPTION~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH</FN>'; 
+msgxml += '      <FN PARENT="" RELATION_TYPE="1" TYPE="BLK_MAIN">GROUP_CODE~GROUP_STATUS~GROUP_TYPE~SINCE~TAB_DESCRIPTION~EXPOSURE_CATEGORY~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH</FN>'; 
 msgxml += '    </FLD>'; 
 
 var strScreenName = "CVS_MAIN";
@@ -56,7 +56,7 @@ var originSystem = "";
 //----------------------------------------------------------------------------------------------------------------------
 var msgxml_sum=""; 
 msgxml_sum += '    <FLD>'; 
-msgxml_sum += '      <FN PARENT="" RELATION_TYPE="1" TYPE="BLK_MAIN">AUTHSTAT~TXNSTAT~EXPOSURE_CATEGORY~GROUP_CODE~GROUP_STATUS~GROUP_TYPE~SINCE~TAB_DESCRIPTION</FN>'; 
+msgxml_sum += '      <FN PARENT="" RELATION_TYPE="1" TYPE="BLK_MAIN">AUTHSTAT~TXNSTAT~GROUP_CODE~GROUP_STATUS~GROUP_TYPE~SINCE~TAB_DESCRIPTION~EXPOSURE_CATEGORY</FN>'; 
 msgxml_sum += '    </FLD>'; 
 
 var detailFuncId = "STDKEVI1";
@@ -107,7 +107,7 @@ var subsysArr    = new Array();
 
 //***** CODE FOR LOVs *****
 //----------------------------------------------------------------------------------------------------------------------
-var lovInfoFlds = {"BLK_MAIN__EXPOSURE_CATEGORY__LOV_EXPOSURE_CATEGORY":["BLK_MAIN__EXPOSURE_CATEGORY~","","N",""]};
+var lovInfoFlds = {"BLK_MAIN__EXPOSURE_CATEGORY__LOV_EXPOSURE_CATEGORY3":["~~","","N~N",""]};
 var offlineLovInfoFlds = {};
 //----------------------------------------------------------------------------------------------------------------------
 //***** SCRIPT FOR TABS *****

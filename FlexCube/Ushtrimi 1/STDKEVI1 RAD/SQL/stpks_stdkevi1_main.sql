@@ -131,7 +131,6 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi1_main AS
       LOOP
          --Dbg('Node Name  :'||l_Node);
          IF  l_Node = 'BLK_MAIN' THEN
-            p_stdkevi1.v_tab_stdkevi1.EXPOSURE_CATEGORY := Cspks_Req_Global.Fn_GetVal;
             p_stdkevi1.v_tab_stdkevi1.GROUP_CODE := Cspks_Req_Global.Fn_GetVal;
             p_stdkevi1.v_tab_stdkevi1.GROUP_STATUS := Cspks_Req_Global.Fn_GetVal;
             p_stdkevi1.v_tab_stdkevi1.GROUP_TYPE := Cspks_Req_Global.Fn_GetVal;
@@ -142,6 +141,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi1_main AS
                p_stdkevi1.v_tab_stdkevi1.SINCE := TO_DATE(l_val,Cspks_Req_Global.g_Date_Format);
             END IF;
             p_stdkevi1.v_tab_stdkevi1.TAB_DESCRIPTION := Cspks_Req_Global.Fn_GetVal;
+            p_stdkevi1.v_tab_stdkevi1.EXPOSURE_CATEGORY := Cspks_Req_Global.Fn_GetVal;
             p_stdkevi1.v_tab_stdkevi1.MAKER_ID := Cspks_Req_Global.Fn_GetVal;
             l_Val       := Cspks_Req_Global.Fn_GetVal;
             IF Length(l_Val) > Length(Cspks_Req_Global.g_Date_Format) THEN
@@ -214,9 +214,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi1_main AS
             WHILE (l_Key <> 'EOPL')
             LOOP
                --dbg('Key/Value   :'||l_Key ||':'||l_Val);
-               IF l_Key = 'EXPOSURE_CATEGORY' THEN
-                  p_stdkevi1.v_tab_stdkevi1.EXPOSURE_CATEGORY := l_Val;
-               ELSIF l_Key = 'GROUP_CODE' THEN
+               IF l_Key = 'GROUP_CODE' THEN
                   p_stdkevi1.v_tab_stdkevi1.GROUP_CODE := l_Val;
                ELSIF l_Key = 'GROUP_STATUS' THEN
                   p_stdkevi1.v_tab_stdkevi1.GROUP_STATUS := l_Val;
@@ -235,6 +233,8 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi1_main AS
                   END;
                ELSIF l_Key IN( 'FILE_CON_CDE_DESC','TAB_DESCRIPTION')  THEN
                   p_stdkevi1.v_tab_stdkevi1.TAB_DESCRIPTION := l_Val;
+               ELSIF l_Key IN( 'EXPCAT','EXPOSURE_CATEGORY')  THEN
+                  p_stdkevi1.v_tab_stdkevi1.EXPOSURE_CATEGORY := l_Val;
                ELSIF l_Key = 'MAKER' THEN
                   p_stdkevi1.v_tab_stdkevi1.MAKER_ID := l_Val;
                ELSIF l_Key = 'MAKERSTAMP' THEN
@@ -319,7 +319,6 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi1_main AS
       l_0_Lvl_Counter   := l_0_Lvl_Counter +1;
       l_Level_Format      := l_0_Lvl_Counter;
       Cspks_Req_Global.Pr_Write('P','BLK_MAIN',l_Level_Format);
-      Cspks_Req_Global.Pr_Write('V','EXPOSURE_CATEGORY',p_stdkevi1.v_tab_stdkevi1.exposure_category);
       Cspks_Req_Global.Pr_Write('V','GROUP_CODE',p_stdkevi1.v_tab_stdkevi1.group_code);
       Cspks_Req_Global.Pr_Write('V','GROUP_STATUS',p_stdkevi1.v_tab_stdkevi1.group_status);
       Cspks_Req_Global.Pr_Write('V','GROUP_TYPE',p_stdkevi1.v_tab_stdkevi1.group_type);
@@ -331,6 +330,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi1_main AS
       END IF;
       Cspks_Req_Global.Pr_Write('V','SINCE',l_Date_Val);
       Cspks_Req_Global.Pr_Write('V','TAB_DESCRIPTION',p_stdkevi1.v_tab_stdkevi1.tab_description);
+      Cspks_Req_Global.Pr_Write('V','EXPOSURE_CATEGORY',p_stdkevi1.v_tab_stdkevi1.exposure_category);
       Cspks_Req_Global.Pr_Write('V','MAKER',p_stdkevi1.v_tab_stdkevi1.maker_id);
       IF trunc(p_stdkevi1.v_tab_stdkevi1.maker_dt_stamp) <>
             p_stdkevi1.v_tab_stdkevi1.maker_dt_stamp THEN
@@ -396,7 +396,6 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi1_main AS
             l_0_Lvl_Counter   := l_0_Lvl_Counter +1;
             l_Level_Format      := l_0_Lvl_Counter;
             Cspks_Req_Global.Pr_Write('P','Main-Full',l_Level_Format);
-            Cspks_Req_Global.Pr_Write('V','EXPOSURE_CATEGORY',p_stdkevi1.v_tab_stdkevi1.exposure_category);
             Cspks_Req_Global.Pr_Write('V','GROUP_CODE',p_stdkevi1.v_tab_stdkevi1.group_code);
             Cspks_Req_Global.Pr_Write('V','GROUP_STATUS',p_stdkevi1.v_tab_stdkevi1.group_status);
             Cspks_Req_Global.Pr_Write('V','GROUP_TYPE',p_stdkevi1.v_tab_stdkevi1.group_type);
@@ -408,6 +407,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi1_main AS
             END IF;
             Cspks_Req_Global.Pr_Write('V','SINCE',l_Date_Val);
             Cspks_Req_Global.Pr_Write('V','FILE_CON_CDE_DESC',p_stdkevi1.v_tab_stdkevi1.tab_description);
+            Cspks_Req_Global.Pr_Write('V','EXPCAT',p_stdkevi1.v_tab_stdkevi1.exposure_category);
             Cspks_Req_Global.Pr_Write('V','MAKER',p_stdkevi1.v_tab_stdkevi1.maker_id);
             IF trunc(p_stdkevi1.v_tab_stdkevi1.maker_dt_stamp) <>
                   p_stdkevi1.v_tab_stdkevi1.maker_dt_stamp THEN
@@ -718,14 +718,6 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi1_main AS
 
       Dbg('In Fn_Sys_Lov_Vals');
       l_Blk := 'TAB_STDKEVI1';
-      l_Fld := 'TAB_STDKEVI1.EXPOSURE_CATEGORY';
-      IF p_wrk_stdkevi1.v_tab_stdkevi1.EXPOSURE_CATEGORY IS NOT NULL THEN
-         SELECT COUNT(*) INTO l_LOV_COUNT  FROM  (SELECT EXPOSURE_CATEGORY FROM STDKEVI1_CATEGORY) WHERE EXPOSURE_CATEGORY = P_wrk_stdkevi1.v_tab_stdkevi1.EXPOSURE_CATEGORY;
-         IF l_lov_count = 0  THEN
-            Dbg('Invalid Value For The Field  :EXPOSURE_CATEGORY:'||p_Wrk_stdkevi1.v_tab_stdkevi1.EXPOSURE_CATEGORY);
-            Pr_Log_Error(p_Source,'ST-VALS-011',p_Wrk_stdkevi1.v_tab_stdkevi1.EXPOSURE_CATEGORY||'~@TAB_STDKEVI1.EXPOSURE_CATEGORY~@TAB_STDKEVI1') ;
-         END IF;
-      END IF;
       Dbg('Returning Success From Fn_Sys_Lov_Vals..');
       RETURN TRUE;
    EXCEPTION
@@ -1780,12 +1772,12 @@ WHERE group_code = p_Wrk_stdkevi1.v_tab_stdkevi1.group_code
                p_Record_Master.Key_Id := g_Key_Id;
                p_Record_Master.AUTH_STAT := l_Summary_Rec.AUTH_STAT;
                p_Record_Master.RECORD_STAT := l_Summary_Rec.RECORD_STAT;
-               p_Record_Master.CHAR_FLD_1 := l_Summary_Rec.EXPOSURE_CATEGORY;
-               p_Record_Master.CHAR_FLD_2 := l_Summary_Rec.GROUP_CODE;
-               p_Record_Master.CHAR_FLD_3 := l_Summary_Rec.GROUP_STATUS;
-               p_Record_Master.CHAR_FLD_4 := l_Summary_Rec.GROUP_TYPE;
+               p_Record_Master.CHAR_FLD_1 := l_Summary_Rec.GROUP_CODE;
+               p_Record_Master.CHAR_FLD_2 := l_Summary_Rec.GROUP_STATUS;
+               p_Record_Master.CHAR_FLD_3 := l_Summary_Rec.GROUP_TYPE;
                p_Record_Master.DATE_FLD_1 := l_Summary_Rec.SINCE;
-               p_Record_Master.CHAR_FLD_5 := l_Summary_Rec.TAB_DESCRIPTION;
+               p_Record_Master.CHAR_FLD_4 := l_Summary_Rec.TAB_DESCRIPTION;
+               p_Record_Master.CHAR_FLD_5 := l_Summary_Rec.EXPOSURE_CATEGORY;
             END IF;
          END IF;
       END IF;
@@ -2172,8 +2164,8 @@ Pr_Log_Change('ONCE_AUTH',l_Rec_Action,p_Prev_stdkevi1.v_tab_stdkevi1.once_auth,
       p_Node_Data(l_Cntr).Node_Parent := '';
       p_Node_Data(l_Cntr).Node_Relation_Type := '1';
       p_Node_Data(l_Cntr).Query_Node := '0';
-      p_Node_Data(l_Cntr).Node_Fields := 'EXPOSURE_CATEGORY~GROUP_CODE~GROUP_STATUS~GROUP_TYPE~SINCE~TAB_DESCRIPTION~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH~';
-      p_Node_Data(l_Cntr).Node_Tags := 'EXPOSURE_CATEGORY~GROUP_CODE~GROUP_STATUS~GROUP_TYPE~SINCE~FILE_CON_CDE_DESC~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH~';
+      p_Node_Data(l_Cntr).Node_Fields := 'GROUP_CODE~GROUP_STATUS~GROUP_TYPE~SINCE~TAB_DESCRIPTION~EXPOSURE_CATEGORY~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH~';
+      p_Node_Data(l_Cntr).Node_Tags := 'GROUP_CODE~GROUP_STATUS~GROUP_TYPE~SINCE~FILE_CON_CDE_DESC~EXPCAT~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH~';
 
       Dbg('Returning From Fn_Get_Node_Data.. ');
       RETURN TRUE;
