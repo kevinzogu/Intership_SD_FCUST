@@ -90,12 +90,15 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi3_custom AS
     RETURN BOOLEAN
   
    IS
+  l_p_id VARCHAR2(25);
   BEGIN
   
     Dbg('In Fn_Pre_Check_Mandatory');
     IF p_Action_Code = 'POPULATE' THEN
       p_stdkevi3.v_master_stdkevi3.COSTUMER_ID := stdkevi3_seq.NEXTVAL;
+      
     END IF;
+    
     IF p_Action_Code = 'NEW' THEN
       p_stdkevi3.v_master_stdkevi3.COSTUMER_ID := p_stdkevi3.v_master_stdkevi3.COSTUMER_ID;
       dbg(' p_stdkevi3.v_master_stdkevi3.COSTUMER_ID ' ||
@@ -105,6 +108,45 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi3_custom AS
         p_stdkevi3.v_detail_stdkevi3(I).COSTUMER_DETAIL_ID := stdkevi3_seq_d.nextval;
       END LOOP;
     END IF;
+    
+    --
+    
+                    DBG('p_Action_Code ' || p_Action_Code);
+                    
+                    
+             DBG('p_stdkevi3.v_master_stdkevi3.COSTUMER_TYPE : ' || p_stdkevi3.v_master_stdkevi3.COSTUMER_TYPE);
+         DBG('p_stdkevi3.v_master_stdkevi3.COSTUMER_CATEGORY : ' || p_stdkevi3.v_master_stdkevi3.COSTUMER_CATEGORY);
+         
+    if p_Action_Code='EXECUTEQUERY' AND p_stdkevi3.v_master_stdkevi3.COSTUMER_TYPE IS NOT NULL AND 
+                                           p_stdkevi3.v_master_stdkevi3.COSTUMER_CATEGORY IS NOT NULL 
+                                           THEN
+         DBG('INSIDE EXECUTE QUERY');
+
+        BEGIN
+        SELECT COSTUMER_ID
+          INTO l_p_id
+          FROM master_stdkevi3
+         WHERE COSTUMER_TYPE=
+               p_stdkevi3.v_master_stdkevi3.COSTUMER_TYPE 
+           AND COSTUMER_CATEGORY=
+               p_stdkevi3.v_master_stdkevi3.COSTUMER_CATEGORY;
+      
+        Dbg('l_p_id is :  ' || l_p_id);
+        
+              EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+          dbg('Fail in geting ID ');
+          RETURN FALSE;
+      END;
+       IF l_p_id IS NULL  THEN
+        dbg('CAN`T FIND THE ID FOR THIS CATEGORY AND RELATIONSHIP...');
+         Pr_Log_Error(p_Function_Id,p_Source ,'CS-MAIL03' , Null);
+   
+        
+        ELSE
+            p_stdkevi3.v_master_stdkevi3.COSTUMER_ID :=l_p_id;
+        END IF;
+              END IF;
     Dbg('Returning Success From Fn_Pre_Check_Mandatory..');
     RETURN TRUE;
   EXCEPTION
@@ -185,6 +227,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi3_custom AS
     RETURN BOOLEAN IS
     l_index NUMBER := 1;    
     l_count Number := 0;
+    l_count1 Number := 0;
     
   BEGIN
   
@@ -192,6 +235,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi3_custom AS
   
     ---ketu 
     Dbg('p_Action_Code ' || p_Action_Code);
+    
     IF p_Action_Code = 'POPULATE' THEN
       Dbg('p_Action_Code is populate ');
       Dbg('p_Wrk_stdkevi3.v_master_stdkevi3.COSTUMER_TYPE: ' ||
@@ -223,7 +267,12 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi3_custom AS
    
         
         ELSE
-          FOR var IN (SELECT field_description, mandatory_validation
+  
+             DBG('Working with populate');
+             
+             p_Wrk_stdkevi3.v_detail_stdkevi3.delete;
+             
+             FOR var IN (SELECT field_description, mandatory_validation
                         FROM STDKEVI3_Customer
                        WHERE costumer_type =
                              p_Wrk_stdkevi3.v_master_stdkevi3.COSTUMER_TYPE
@@ -232,13 +281,14 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi3_custom AS
             Dbg('inside loop index value : ' || l_index);
             p_Wrk_stdkevi3.v_detail_stdkevi3(l_index).FIELD_DESCRIPTION := var.field_description;
             p_Wrk_stdkevi3.v_detail_stdkevi3(l_index).MANDATORY_VALIDATION := var.mandatory_validation;
+            dbg('p_Wrk_stdkevi3.v_detail_stdkevi3(l_index).FIELD_DESCRIPTION : ' || p_Wrk_stdkevi3.v_detail_stdkevi3(l_index).FIELD_DESCRIPTION);
+            dbg('p_Wrk_stdkevi3.v_detail_stdkevi3(l_index).MANDATORY_VALIDATION' || p_Wrk_stdkevi3.v_detail_stdkevi3(l_index).MANDATORY_VALIDATION);
             l_index := l_index + 1;
             Dbg('index value : ' || l_index);
-          END LOOP;
-          Dbg('outside loop index value : ' || l_index);
-        END IF;
-    
+            END LOOP;
+    end if;
     END IF;
+    
   
     Dbg('Returning Success From Fn_Post_Default_And_Validate..');
     RETURN TRUE;
