@@ -237,7 +237,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
                --dbg('Key/Value   :'||l_Key ||':'||l_Val);
                IF l_Key = 'AMOUNT' THEN
                   p_stdkevi4.v_master_stdkevi4.AMOUNT := l_Val;
-               ELSIF l_Key = 'CCY' THEN
+               ELSIF l_Key IN( 'CCYY','CCY')  THEN
                   p_stdkevi4.v_master_stdkevi4.CCY := l_Val;
                ELSIF l_Key IN( 'ACCOPT','CUSTOMER_ACCOUNT')  THEN
                   p_stdkevi4.v_master_stdkevi4.CUSTOMER_ACCOUNT := l_Val;
@@ -492,7 +492,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
             l_Level_Format      := l_0_Lvl_Counter;
             Cspks_Req_Global.Pr_Write('P','Master-Full',l_Level_Format);
             Cspks_Req_Global.Pr_Write('V','AMOUNT',p_stdkevi4.v_master_stdkevi4.amount);
-            Cspks_Req_Global.Pr_Write('V','CCY',p_stdkevi4.v_master_stdkevi4.ccy);
+            Cspks_Req_Global.Pr_Write('V','CCYY',p_stdkevi4.v_master_stdkevi4.ccy);
             Cspks_Req_Global.Pr_Write('V','ACCOPT',p_stdkevi4.v_master_stdkevi4.customer_account);
             Cspks_Req_Global.Pr_Write('V','CUSTOMER_NAME',p_stdkevi4.v_master_stdkevi4.customer_name);
             Cspks_Req_Global.Pr_Write('V','CUSTOMER_NO',p_stdkevi4.v_master_stdkevi4.customer_no);
@@ -2246,11 +2246,33 @@ WHERE customer_no = U_v_detail_stdkevi4(l_index).customer_no
                               p_Err_Params        IN OUT VARCHAR2)
    RETURN BOOLEAN IS
 
+      l_Summary_Rec     MASTER_STDKEVI4%ROWTYPE;
       l_Summary_Rec_Found BOOLEAN := TRUE;
    BEGIN
 
       Dbg('In Fn_Populate_Record_Master..');
 
+      IF  p_Action_Code IN (Cspks_Req_Global.p_New,Cspks_Req_Global.p_Modify,Cspks_Req_Global.p_Close,Cspks_Req_Global.p_Reopen) THEN
+         Dbg('Populating Record Master ..');
+         IF g_Key_Id IS NOT NULL THEN
+            l_Summary_Rec := p_stdkevi4.v_master_stdkevi4;
+            IF l_Summary_Rec_Found THEN
+               Dbg('Summary Record Found..');
+               p_Record_Master.Key_Id := g_Key_Id;
+               p_Record_Master.AUTH_STAT := l_Summary_Rec.AUTH_STAT;
+               p_Record_Master.RECORD_STAT := l_Summary_Rec.RECORD_STAT;
+               p_Record_Master.NUM_FLD_1 := l_Summary_Rec.AMOUNT;
+               p_Record_Master.CHAR_FLD_1 := l_Summary_Rec.CCY;
+               p_Record_Master.CHAR_FLD_2 := l_Summary_Rec.CUSTOMER_ACCOUNT;
+               p_Record_Master.CHAR_FLD_3 := l_Summary_Rec.CUSTOMER_NAME;
+               p_Record_Master.CHAR_FLD_4 := l_Summary_Rec.CUSTOMER_NO;
+               p_Record_Master.DATE_FLD_1 := l_Summary_Rec.C_DATE;
+               p_Record_Master.CHAR_FLD_5 := l_Summary_Rec.EMAIL;
+               p_Record_Master.NUM_FLD_2 := l_Summary_Rec.PHONE_NUMBER;
+               p_Record_Master.CHAR_FLD_6 := l_Summary_Rec.PRIORITY;
+            END IF;
+         END IF;
+      END IF;
 
       Dbg('Returning Success From Fn_Populate_Record_Master..');
       RETURN TRUE;
@@ -2706,7 +2728,7 @@ Pr_Log_Change('SUBJECT','D',p_Prev_stdkevi4.v_detail_stdkevi4(l_Index).subject,N
       p_Node_Data(l_Cntr).Node_Relation_Type := '1';
       p_Node_Data(l_Cntr).Query_Node := '0';
       p_Node_Data(l_Cntr).Node_Fields := 'AMOUNT~CCY~CUSTOMER_ACCOUNT~CUSTOMER_NAME~CUSTOMER_NO~C_DATE~EMAIL~PHONE_NUMBER~PRIORITY~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH~';
-      p_Node_Data(l_Cntr).Node_Tags := 'AMOUNT~CCY~ACCOPT~CUSTOMER_NAME~CUSTOMER_NO~INCORPDT~EMAIL~PHONE_NUMBER~PRIORITY~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH~';
+      p_Node_Data(l_Cntr).Node_Tags := 'AMOUNT~CCYY~ACCOPT~CUSTOMER_NAME~CUSTOMER_NO~INCORPDT~EMAIL~PHONE_NUMBER~PRIORITY~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH~';
 
       l_Cntr  := Nvl(p_Node_Data.Count,0) + 1;
       p_Node_Data(l_Cntr).Node_Name := 'BLK_DETAIL';
