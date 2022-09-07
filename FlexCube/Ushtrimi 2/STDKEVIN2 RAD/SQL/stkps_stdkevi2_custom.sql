@@ -85,6 +85,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi2_custom AS
    RETURN BOOLEAN
 
       IS
+     l_p_id VARCHAR2(25);
    BEGIN
 
       Dbg('In Fn_Pre_Check_Mandatory');
@@ -94,8 +95,46 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi2_custom AS
         p_stdkevi2.v_DETAIL_stdkevi2(I).product_id :=  p_stdkevi2.v_master_stdkevi2.product_id;
        END LOOP;
        END IF;
+                DBG('OUTSIDE EXECUTE QUERY');
+                DBG('p_Action_Code ' || p_Action_Code);
+               
+         DBG('p_stdkevi2.v_master_stdkevi2.RELATIONSHIP : ' || p_stdkevi2.v_master_stdkevi2.RELATIONSHIP);
+         DBG('p_stdkevi2.v_master_stdkevi2.TAB_CATEGORY : ' || p_stdkevi2.v_master_stdkevi2.TAB_CATEGORY);
+         
+       if p_Action_Code='EXECUTEQUERY' AND p_stdkevi2.v_master_stdkevi2.RELATIONSHIP IS NOT NULL AND 
+                                           p_stdkevi2.v_master_stdkevi2.TAB_CATEGORY IS NOT NULL 
+                                           THEN
+         DBG('INSIDE EXECUTE QUERY');
+
+        BEGIN
+        SELECT product_id
+          INTO l_p_id
+          FROM master_stdkevi2
+         WHERE RELATIONSHIP=
+               p_stdkevi2.v_master_stdkevi2.RELATIONSHIP 
+           AND TAB_CATEGORY=
+               p_stdkevi2.v_master_stdkevi2.TAB_CATEGORY;
+      
+        Dbg('l_p_id is :  ' || l_p_id);
+        
+              EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+          dbg('Fail in geting ID ');
+          RETURN FALSE;
+      END;
+       IF l_p_id IS NULL  THEN
+        dbg('CAN`T FIND THE ID FOR THIS CATEGORY AND RELATIONSHIP...');
+         Pr_Log_Error(p_Function_Id,p_Source ,'CS-MAIL03' , Null);
+   
+        
+        ELSE
+            p_stdkevi2.v_master_stdkevi2.product_id :=l_p_id;
+        END IF;
+              END IF;
+
       Dbg('Returning Success From Fn_Pre_Check_Mandatory..');
       RETURN TRUE;
+
    EXCEPTION
       WHEN OTHERS THEN
          Debug.Pr_Debug('**','In When Others of stpks_stdkevi2_Custom.Fn_Pre_Check_Mandatory ..');

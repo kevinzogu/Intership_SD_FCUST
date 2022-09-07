@@ -89,7 +89,7 @@ pkFields[0] = "BLK_MASTER__PRODUCT_ID";
 //***** CODE FOR AMENDABLE/SUBSYSTEM Fields *****
 //----------------------------------------------------------------------------------------------------------------------
 //***** Fields Amendable while Modification *****
-var modifyAmendArr = {"BLK_DETAIL":["PRODUCT_CODE"],"BLK_MASTER":["PRODUCT_RESCRIPTION","RELATIONSHIP","TAB_CATEGORY","TAB_DESCRIPTION"]};
+var modifyAmendArr = {"BLK_DETAIL":["PRODUCT_CODE"],"BLK_MASTER":["PRODUCT_RESCRIPTION","TAB_DESCRIPTION"]};
 var closeAmendArr = new Array(); 
 var reopenAmendArr = new Array(); 
 var reverseAmendArr = new Array(); 
@@ -98,7 +98,7 @@ var rolloverAmendArr = new Array();
 var confirmAmendArr = new Array(); 
 var liquidateAmendArr = new Array(); 
 //***** Fields Amendable while Query *****
-var queryAmendArr = {"BLK_DETAIL":["PRODUCT_CODE"],"BLK_MASTER":["PRODUCT_RESCRIPTION","RELATIONSHIP","TAB_CATEGORY","TAB_DESCRIPTION"]};
+var queryAmendArr = {"BLK_DETAIL":["PRODUCT_CODE","PRODUCT_ID"],"BLK_MASTER":["PRODUCT_ID","PRODUCT_RESCRIPTION","RELATIONSHIP","TAB_CATEGORY","TAB_DESCRIPTION"]};
 var authorizeAmendArr = new Array(); 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -108,7 +108,7 @@ var subsysArr    = new Array();
 
 //***** CODE FOR LOVs *****
 //----------------------------------------------------------------------------------------------------------------------
-var lovInfoFlds = {"BLK_MASTER__TAB_CATEGORY__LOV_CATEGORY":["BLK_MASTER__TAB_CATEGORY~","","N",""],"BLK_DETAIL__PRODUCT_CODE__LOV_CODE":["BLK_DETAIL__PRODUCT_CODE~","","N",""]};
+var lovInfoFlds = {"BLK_MASTER__TAB_CATEGORY__LOV_CATEGORY_K":["BLK_MASTER__TAB_CATEGORY~~","","N~N",""],"BLK_DETAIL__PRODUCT_CODE__LOV_CODE_K":["BLK_DETAIL__PRODUCT_CODE~~","","N~N",""]};
 var offlineLovInfoFlds = {};
 //----------------------------------------------------------------------------------------------------------------------
 //***** SCRIPT FOR TABS *****

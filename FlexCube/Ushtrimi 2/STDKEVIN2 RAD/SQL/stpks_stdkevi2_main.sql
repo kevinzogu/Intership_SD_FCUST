@@ -879,7 +879,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi2_main AS
       l_Blk := 'MASTER_STDKEVI2';
       l_Fld := 'MASTER_STDKEVI2.TAB_CATEGORY';
       IF p_wrk_stdkevi2.v_master_stdkevi2.TAB_CATEGORY IS NOT NULL THEN
-         SELECT COUNT(*) INTO l_LOV_COUNT  FROM  (SELECT exposure_category from stdkevi1_category) WHERE EXPOSURE_CATEGORY = P_wrk_stdkevi2.v_master_stdkevi2.TAB_CATEGORY;
+         SELECT COUNT(*) INTO l_LOV_COUNT  FROM  (SELECT CATEGORY_C,DESCRIPTION_CATEGORY FROM STDKEVI2_CATEGORY) WHERE CATEGORY_C = P_wrk_stdkevi2.v_master_stdkevi2.TAB_CATEGORY;
          IF l_lov_count = 0  THEN
             Dbg('Invalid Value For The Field  :TAB_CATEGORY:'||p_Wrk_stdkevi2.v_master_stdkevi2.TAB_CATEGORY);
             Pr_Log_Error(p_Source,'ST-VALS-011',p_Wrk_stdkevi2.v_master_stdkevi2.TAB_CATEGORY||'~@MASTER_STDKEVI2.TAB_CATEGORY~@MASTER_STDKEVI2') ;
@@ -891,7 +891,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi2_main AS
             l_Blk := 'DETAIL_STDKEVI2';
             l_Fld := 'DETAIL_STDKEVI2.PRODUCT_CODE';
             IF p_wrk_stdkevi2.v_detail_stdkevi2(l_Index).PRODUCT_CODE IS NOT NULL THEN
-               SELECT COUNT(*) INTO l_LOV_COUNT  FROM  (SELECT product_code FROM stdkevi2_code) WHERE PRODUCT_CODE = P_wrk_stdkevi2.v_detail_stdkevi2(l_Index).PRODUCT_CODE;
+               SELECT COUNT(*) INTO l_LOV_COUNT  FROM  (SELECT PRODUCT_CODE,DESCRIPTION_CODE FROM STDKEVI2_CODE) WHERE PRODUCT_CODE = P_wrk_stdkevi2.v_detail_stdkevi2(l_Index).PRODUCT_CODE;
                IF l_lov_count = 0  THEN
                   Dbg('Invalid Value For The Field  :PRODUCT_CODE:'||p_Wrk_stdkevi2.v_detail_stdkevi2(l_Index).PRODUCT_CODE);
                   l_key := Cspks_Req_Utils.Fn_Get_Item_Desc(p_source,g_ui_name,'DETAIL_STDKEVI2.PRODUCT_CODE')||'-'||
