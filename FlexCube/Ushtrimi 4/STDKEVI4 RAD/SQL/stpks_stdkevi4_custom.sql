@@ -100,17 +100,6 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_custom AS
         p_stdkevi4.v_detail_stdkevi4(I).CUSTOMER_ID := STDKEVI4_SEQ.nextval;
     end loop;
     end if;
-    
-    IF p_Action_Code = 'COPY' THEN
-      dbg('p_stdkevi4.v_master_stdkevi4.CUSTOMER_REFERENCE : ' || p_stdkevi4.v_master_stdkevi4.CUSTOMER_REFERENCE);
-            p_stdkevi4.v_master_stdkevi4.CUSTOMER_REFERENCE := ( p_stdkevi4.v_master_stdkevi4.CUSTOMER_REFERENCE || ' C'); 
-            
-        FOR I IN 1 .. p_stdkevi4.v_detail_stdkevi4.COUNT  LOOP
-        p_stdkevi4.v_detail_stdkevi4(I).CUSTOMER_REFERENCE := p_stdkevi4.v_master_stdkevi4.CUSTOMER_REFERENCE;
-        p_stdkevi4.v_detail_stdkevi4(I).CUSTOMER_ID := STDKEVI4_SEQ.nextval;
-        
-        END LOOP;
-    END IF;
       Dbg('Returning Success From Fn_Pre_Check_Mandatory..');
       RETURN TRUE;
    EXCEPTION
