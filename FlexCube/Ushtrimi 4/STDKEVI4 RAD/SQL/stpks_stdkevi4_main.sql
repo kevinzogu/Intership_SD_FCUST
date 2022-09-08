@@ -147,6 +147,8 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
             p_stdkevi4.v_master_stdkevi4.EMAIL := Cspks_Req_Global.Fn_GetVal;
             p_stdkevi4.v_master_stdkevi4.PHONE_NUMBER := Cspks_Req_Global.Fn_GetVal;
             p_stdkevi4.v_master_stdkevi4.PRIORITY := Cspks_Req_Global.Fn_GetVal;
+            p_stdkevi4.v_master_stdkevi4.CUSTOMER_REFERENCE := Cspks_Req_Global.Fn_GetVal;
+            p_stdkevi4.v_master_stdkevi4.DESCRIPTION_REFERENCE := Cspks_Req_Global.Fn_GetVal;
             p_stdkevi4.v_master_stdkevi4.MAKER_ID := Cspks_Req_Global.Fn_GetVal;
             l_Val       := Cspks_Req_Global.Fn_GetVal;
             IF Length(l_Val) > Length(Cspks_Req_Global.g_Date_Format) THEN
@@ -168,7 +170,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
          ELSIF  l_Node = 'BLK_DETAIL' THEN
             l_Dsn_Rec_Cnt_2 :=  p_stdkevi4.v_detail_stdkevi4.count +1 ;
             p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).CUSTOMER_ID := Cspks_Req_Global.Fn_GetVal;
-            p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).CUSTOMER_NO := Cspks_Req_Global.Fn_GetVal;
+            p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).CUSTOMER_REFERENCE := Cspks_Req_Global.Fn_GetVal;
             p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).DETAIL_DESCRIPTION := Cspks_Req_Global.Fn_GetVal;
             p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).DETAIL_USER := Cspks_Req_Global.Fn_GetVal;
             l_Val       := Cspks_Req_Global.Fn_GetVal;
@@ -178,7 +180,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
                p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).D_DATE := TO_DATE(l_val,Cspks_Req_Global.g_Date_Format);
             END IF;
             p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).SUBJECT := Cspks_Req_Global.Fn_GetVal;
-            p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).customer_no :=p_stdkevi4.v_master_stdkevi4.customer_no;
+            p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).customer_reference :=p_stdkevi4.v_master_stdkevi4.customer_reference;
          END IF;
          l_Node := Cspks_Req_Global.Fn_GetNode;
       END LOOP;
@@ -262,6 +264,10 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
                   p_stdkevi4.v_master_stdkevi4.PHONE_NUMBER := l_Val;
                ELSIF l_Key = 'PRIORITY' THEN
                   p_stdkevi4.v_master_stdkevi4.PRIORITY := l_Val;
+               ELSIF l_Key IN( 'REFERENCE','CUSTOMER_REFERENCE')  THEN
+                  p_stdkevi4.v_master_stdkevi4.CUSTOMER_REFERENCE := l_Val;
+               ELSIF l_Key IN( 'FLDDES','DESCRIPTION_REFERENCE')  THEN
+                  p_stdkevi4.v_master_stdkevi4.DESCRIPTION_REFERENCE := l_Val;
                ELSIF l_Key = 'MAKER' THEN
                   p_stdkevi4.v_master_stdkevi4.MAKER_ID := l_Val;
                ELSIF l_Key = 'MAKERSTAMP' THEN
@@ -309,9 +315,9 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
                --dbg('Key/Value   :'||l_Key ||':'||l_Val);
                IF l_Key = 'CUSTOMER_ID' THEN
                   p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).CUSTOMER_ID := l_Val;
-               ELSIF l_Key = 'CUSTOMER_NO' THEN
-                  p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).CUSTOMER_NO := l_Val;
-               ELSIF l_Key IN( 'FILE_CON_CDE_DESC','DETAIL_DESCRIPTION')  THEN
+               ELSIF l_Key = 'CUSTOMER_REFERENCE' THEN
+                  p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).CUSTOMER_REFERENCE := l_Val;
+               ELSIF l_Key IN( 'FLDDES','DETAIL_DESCRIPTION')  THEN
                   p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).DETAIL_DESCRIPTION := l_Val;
                ELSIF l_Key IN( 'USER','DETAIL_USER')  THEN
                   p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).DETAIL_USER := l_Val;
@@ -332,7 +338,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
                l_Key       := Cspks_Req_Global.Fn_GetTag;
                l_Val       := Cspks_Req_Global.Fn_GetVal;
             END LOOP;
-            p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).customer_no :=p_stdkevi4.v_master_stdkevi4.customer_no;
+            p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).customer_reference :=p_stdkevi4.v_master_stdkevi4.customer_reference;
          END IF;
          l_Node := Cspks_Req_Global.Fn_GetNode;
       END LOOP;
@@ -398,6 +404,8 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
       Cspks_Req_Global.Pr_Write('V','EMAIL',p_stdkevi4.v_master_stdkevi4.email);
       Cspks_Req_Global.Pr_Write('V','PHONE_NUMBER',p_stdkevi4.v_master_stdkevi4.phone_number);
       Cspks_Req_Global.Pr_Write('V','PRIORITY',p_stdkevi4.v_master_stdkevi4.priority);
+      Cspks_Req_Global.Pr_Write('V','CUSTOMER_REFERENCE',p_stdkevi4.v_master_stdkevi4.customer_reference);
+      Cspks_Req_Global.Pr_Write('V','DESCRIPTION_REFERENCE',p_stdkevi4.v_master_stdkevi4.description_reference);
       Cspks_Req_Global.Pr_Write('V','MAKER',p_stdkevi4.v_master_stdkevi4.maker_id);
       IF trunc(p_stdkevi4.v_master_stdkevi4.maker_dt_stamp) <>
             p_stdkevi4.v_master_stdkevi4.maker_dt_stamp THEN
@@ -429,7 +437,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
             l_Level_Format      := l_0_Lvl_Counter||'.'||l_1_Lvl_Counter;
             Cspks_Req_Global.Pr_Write('P','BLK_DETAIL',l_Level_Format);
             Cspks_Req_Global.Pr_Write('V','CUSTOMER_ID',p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).customer_id);
-            Cspks_Req_Global.Pr_Write('V','CUSTOMER_NO',p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).customer_no);
+            Cspks_Req_Global.Pr_Write('V','CUSTOMER_REFERENCE',p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).customer_reference);
             Cspks_Req_Global.Pr_Write('V','DETAIL_DESCRIPTION',p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).detail_description);
             Cspks_Req_Global.Pr_Write('V','DETAIL_USER',p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).detail_user);
             IF trunc(p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).d_date) <>
@@ -484,7 +492,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
          Dbg('Building Full Screen Reply..');
 
          --Dbg('Building Childs Of :..');
-         IF (  p_stdkevi4.v_master_stdkevi4.customer_no IS NOT NULL 
+         IF (  p_stdkevi4.v_master_stdkevi4.customer_reference IS NOT NULL 
           )
           THEN
             l_1_Lvl_Counter := 0;
@@ -506,6 +514,8 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
             Cspks_Req_Global.Pr_Write('V','EMAIL',p_stdkevi4.v_master_stdkevi4.email);
             Cspks_Req_Global.Pr_Write('V','PHONE_NUMBER',p_stdkevi4.v_master_stdkevi4.phone_number);
             Cspks_Req_Global.Pr_Write('V','PRIORITY',p_stdkevi4.v_master_stdkevi4.priority);
+            Cspks_Req_Global.Pr_Write('V','REFERENCE',p_stdkevi4.v_master_stdkevi4.customer_reference);
+            Cspks_Req_Global.Pr_Write('V','FLDDES',p_stdkevi4.v_master_stdkevi4.description_reference);
             Cspks_Req_Global.Pr_Write('V','MAKER',p_stdkevi4.v_master_stdkevi4.maker_id);
             IF trunc(p_stdkevi4.v_master_stdkevi4.maker_dt_stamp) <>
                   p_stdkevi4.v_master_stdkevi4.maker_dt_stamp THEN
@@ -535,7 +545,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
                   l_1_Lvl_Counter   := l_1_Lvl_Counter +1;
                   l_Level_Format      := l_0_Lvl_Counter||'.'||l_1_Lvl_Counter;
                   Cspks_Req_Global.Pr_Write('P','Detail',l_Level_Format);
-                  Cspks_Req_Global.Pr_Write('V','FILE_CON_CDE_DESC',p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).detail_description);
+                  Cspks_Req_Global.Pr_Write('V','FLDDES',p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).detail_description);
                   Cspks_Req_Global.Pr_Write('V','USER',p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).detail_user);
                   IF trunc(p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).d_date) <>
                         p_stdkevi4.v_detail_stdkevi4(l_Dsn_Rec_Cnt_2).d_date THEN
@@ -551,8 +561,8 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
       ELSE
          Dbg('Building Primary Key Reply..');
          Cspks_Req_Global.pr_Write('P','Master-PK','1');
-         l_Key_Cols := 'CUSTOMER_NO~';
-         l_Key_Vals := p_stdkevi4.v_master_stdkevi4.customer_no||'~';
+         l_Key_Cols := 'REFERENCE~';
+         l_Key_Vals := p_stdkevi4.v_master_stdkevi4.customer_reference||'~';
          Cspks_Req_Global.pr_Write('V',l_Key_Cols,l_Key_Vals);
       END IF;
       Dbg('Returning Success From Fn_Sys_Build_Ws_Ts..');
@@ -583,9 +593,9 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
 
       Dbg('In Fn_Sys_Check_Mandatory..');
 
-      l_Fld := 'MASTER_STDKEVI4.CUSTOMER_NO';
-      IF p_stdkevi4.v_master_stdkevi4.customer_no IS Null THEN
-         Dbg('Field customer_no is Null..');
+      l_Fld := 'MASTER_STDKEVI4.CUSTOMER_REFERENCE';
+      IF p_stdkevi4.v_master_stdkevi4.customer_reference IS Null THEN
+         Dbg('Field customer_reference is Null..');
          p_Err_Code    := 'ST-MAND-001';
          p_Err_Params := '@'||l_Fld;
          RETURN FALSE;
@@ -636,6 +646,12 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
    BEGIN
 
       Dbg('In Fn_Sys_Basic_Vals..');
+      IF p_stdkevi4.v_master_stdkevi4.PRIORITY IS NOT NULL THEN
+         IF p_stdkevi4.v_master_stdkevi4.PRIORITY NOT IN ('High','Mid','Low') THEN
+            dbg('Invalid Value For The Field  :PRIORITY:'||p_stdkevi4.v_master_stdkevi4.PRIORITY);
+            Pr_Log_Error(p_Source,'ST-VALS-011',p_stdkevi4.v_master_stdkevi4.PRIORITY||'~@MASTER_STDKEVI4.PRIORITY~@MASTER_STDKEVI4') ;
+         END IF;
+      END IF;
       Dbg('Duplicate Records Check For :v_detail_stdkevi4..');
       l_Count      := p_stdkevi4.v_detail_stdkevi4.COUNT;
       IF l_Count > 0 THEN
@@ -643,10 +659,10 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
             l_key := NULL;
             IF l_index < l_Count THEN
                FOR l_index1 IN l_index+1 .. l_Count LOOP
-                  IF (NVL(p_stdkevi4.v_detail_stdkevi4(l_index).customer_no,'@')=  NVL(p_stdkevi4.v_detail_stdkevi4(l_index1).customer_no,'@')) AND (NVL(p_stdkevi4.v_detail_stdkevi4(l_index).customer_id,'@')=  NVL(p_stdkevi4.v_detail_stdkevi4(l_index1).customer_id,'@')) THEN
+                  IF (NVL(p_stdkevi4.v_detail_stdkevi4(l_index).customer_reference,'@')=  NVL(p_stdkevi4.v_detail_stdkevi4(l_index1).customer_reference,'@')) AND (NVL(p_stdkevi4.v_detail_stdkevi4(l_index).customer_id,'@')=  NVL(p_stdkevi4.v_detail_stdkevi4(l_index1).customer_id,'@')) THEN
                      Dbg('Duplicare Record Found for :'||l_Key);
-                     l_key := Cspks_Req_Utils.Fn_Get_Item_Desc(p_source,g_ui_name,'DETAIL_STDKEVI4.CUSTOMER_NO')||'-'||
-                     p_stdkevi4.v_detail_stdkevi4(l_index).customer_no||':'||
+                     l_key := Cspks_Req_Utils.Fn_Get_Item_Desc(p_source,g_ui_name,'DETAIL_STDKEVI4.CUSTOMER_REFERENCE')||'-'||
+                     p_stdkevi4.v_detail_stdkevi4(l_index).customer_reference||':'||
                      Cspks_Req_Utils.Fn_Get_Item_Desc(p_source,g_ui_name,'DETAIL_STDKEVI4.CUSTOMER_ID')||'-'||
                      p_stdkevi4.v_detail_stdkevi4(l_index).customer_id;
                      Pr_Log_Error(p_Source,'ST-VALS-009','@DETAIL_STDKEVI4~'||l_Key);
@@ -791,6 +807,18 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
             END IF;
          END IF;
       END IF;
+      l_fld := 'MASTER_STDKEVI4.CUSTOMER_NO';
+      IF Fn_Amendable('MASTER_STDKEVI4.CUSTOMER_NO') THEN
+         p_Wrk_stdkevi4.v_master_stdkevi4.customer_no := p_stdkevi4.v_master_stdkevi4.customer_no;
+      ELSE
+         IF p_stdkevi4.v_master_stdkevi4.customer_no IS NOT NULL THEN
+            IF NVL(p_Wrk_stdkevi4.v_master_stdkevi4.customer_no,'@') <>
+               NVL(p_stdkevi4.v_master_stdkevi4.customer_no,'@')  THEN
+               l_Modified_Flds := l_Modified_Flds ||'~'||l_Fld;
+               l_Rec_Modified := TRUE;
+            END IF;
+         END IF;
+      END IF;
       l_fld := 'MASTER_STDKEVI4.C_DATE';
       IF Fn_Amendable('MASTER_STDKEVI4.C_DATE') THEN
          p_Wrk_stdkevi4.v_master_stdkevi4.c_date := p_stdkevi4.v_master_stdkevi4.c_date;
@@ -798,6 +826,18 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
          IF p_stdkevi4.v_master_stdkevi4.c_date IS NOT NULL THEN
             IF NVL(p_Wrk_stdkevi4.v_master_stdkevi4.c_date,global.min_date) <>
                NVL(p_stdkevi4.v_master_stdkevi4.c_date,global.min_date)  THEN
+               l_Modified_Flds := l_Modified_Flds ||'~'||l_Fld;
+               l_Rec_Modified := TRUE;
+            END IF;
+         END IF;
+      END IF;
+      l_fld := 'MASTER_STDKEVI4.DESCRIPTION_REFERENCE';
+      IF Fn_Amendable('MASTER_STDKEVI4.DESCRIPTION_REFERENCE') THEN
+         p_Wrk_stdkevi4.v_master_stdkevi4.description_reference := p_stdkevi4.v_master_stdkevi4.description_reference;
+      ELSE
+         IF p_stdkevi4.v_master_stdkevi4.description_reference IS NOT NULL THEN
+            IF NVL(p_Wrk_stdkevi4.v_master_stdkevi4.description_reference,'@') <>
+               NVL(p_stdkevi4.v_master_stdkevi4.description_reference,'@')  THEN
                l_Modified_Flds := l_Modified_Flds ||'~'||l_Fld;
                l_Rec_Modified := TRUE;
             END IF;
@@ -1048,6 +1088,30 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
 
       Dbg('In Fn_Sys_Lov_Vals');
       l_Blk := 'MASTER_STDKEVI4';
+      l_Fld := 'MASTER_STDKEVI4.CCY';
+      IF p_wrk_stdkevi4.v_master_stdkevi4.CCY IS NOT NULL THEN
+         SELECT COUNT(*) INTO l_LOV_COUNT  FROM  (select distinct(ccy) from sttm_cust_account) WHERE CCY = P_wrk_stdkevi4.v_master_stdkevi4.CCY;
+         IF l_lov_count = 0  THEN
+            Dbg('Invalid Value For The Field  :CCY:'||p_Wrk_stdkevi4.v_master_stdkevi4.CCY);
+            Pr_Log_Error(p_Source,'ST-VALS-011',p_Wrk_stdkevi4.v_master_stdkevi4.CCY||'~@MASTER_STDKEVI4.CCY~@MASTER_STDKEVI4') ;
+         END IF;
+      END IF;
+      l_Fld := 'MASTER_STDKEVI4.CUSTOMER_ACCOUNT';
+      IF p_wrk_stdkevi4.v_master_stdkevi4.CUSTOMER_ACCOUNT IS NOT NULL THEN
+         SELECT COUNT(*) INTO l_LOV_COUNT  FROM  (select t1.cust_ac_no,t1.ac_desc,t1.ccy from sttm_cust_account t1 where ccy = P_wrk_stdkevi4.v_master_stdkevi4.CCY) WHERE CUST_AC_NO = P_wrk_stdkevi4.v_master_stdkevi4.CUSTOMER_ACCOUNT;
+         IF l_lov_count = 0  THEN
+            Dbg('Invalid Value For The Field  :CUSTOMER_ACCOUNT:'||p_Wrk_stdkevi4.v_master_stdkevi4.CUSTOMER_ACCOUNT);
+            Pr_Log_Error(p_Source,'ST-VALS-011',p_Wrk_stdkevi4.v_master_stdkevi4.CUSTOMER_ACCOUNT||'~@MASTER_STDKEVI4.CUSTOMER_ACCOUNT~@MASTER_STDKEVI4') ;
+         END IF;
+      END IF;
+      l_Fld := 'MASTER_STDKEVI4.CUSTOMER_NO';
+      IF p_wrk_stdkevi4.v_master_stdkevi4.CUSTOMER_NO IS NOT NULL THEN
+         SELECT COUNT(*) INTO l_LOV_COUNT  FROM  (SELECT t1.customer_no, t1.full_name, t2.telephone, t2.e_mail FROM Sttm_Customer t1 INNER JOIN Sttm_Cust_Personal t2 ON t1.customer_no = t2.customer_no) WHERE CUSTOMER_NO = P_wrk_stdkevi4.v_master_stdkevi4.CUSTOMER_NO;
+         IF l_lov_count = 0  THEN
+            Dbg('Invalid Value For The Field  :CUSTOMER_NO:'||p_Wrk_stdkevi4.v_master_stdkevi4.CUSTOMER_NO);
+            Pr_Log_Error(p_Source,'ST-VALS-011',p_Wrk_stdkevi4.v_master_stdkevi4.CUSTOMER_NO||'~@MASTER_STDKEVI4.CUSTOMER_NO~@MASTER_STDKEVI4') ;
+         END IF;
+      END IF;
       Dbg('Returning Success From Fn_Sys_Lov_Vals..');
       RETURN TRUE;
    EXCEPTION
@@ -1095,10 +1159,10 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
                RETURN FALSE;
          END;
       END IF;
-      l_key := Cspks_Req_Utils.Fn_Get_Item_Desc(p_source,g_ui_name,'MASTER_STDKEVI4.CUSTOMER_NO')||'-'||
-      p_stdkevi4.v_master_stdkevi4.customer_no;
-      l_Prev_Key_Tags := 'CUSTOMER_NO~';
-      l_Prev_Key_Vals := p_prev_stdkevi4.v_master_stdkevi4.customer_no||'~';
+      l_key := Cspks_Req_Utils.Fn_Get_Item_Desc(p_source,g_ui_name,'MASTER_STDKEVI4.CUSTOMER_REFERENCE')||'-'||
+      p_stdkevi4.v_master_stdkevi4.customer_reference;
+      l_Prev_Key_Tags := 'CUSTOMER_REFERENCE~';
+      l_Prev_Key_Vals := p_prev_stdkevi4.v_master_stdkevi4.customer_reference||'~';
       Dbg('Calling Cspks_Req_Utils.Fn_Maint_Basic_Validations..');
       IF NOT Cspks_Req_Utils.Fn_Maint_Basic_Validations (p_source,
          p_Source_Operation,
@@ -1290,7 +1354,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
       Cursor c_v_detail_stdkevi4 IS
       SELECT *
       FROM   DETAIL_STDKEVI4
-      WHERE customer_no = p_wrk_stdkevi4.v_master_stdkevi4.customer_no
+      WHERE customer_reference = p_wrk_stdkevi4.v_master_stdkevi4.customer_reference
       ;
    BEGIN
       Dbg('In Fn_Sys_Query..');
@@ -1307,15 +1371,15 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
             RETURN FALSE;
          END IF;
       ELSE
-         l_key := Cspks_Req_Utils.Fn_Get_Item_Desc(p_source,g_ui_name,'MASTER_STDKEVI4.CUSTOMER_NO')||'-'||
-         p_stdkevi4.v_master_stdkevi4.customer_no;
+         l_key := Cspks_Req_Utils.Fn_Get_Item_Desc(p_source,g_ui_name,'MASTER_STDKEVI4.CUSTOMER_REFERENCE')||'-'||
+         p_stdkevi4.v_master_stdkevi4.customer_reference;
          Dbg('Get The Master Record...');
          IF NVL(p_With_Lock,'N') = 'Y' THEN
             BEGIN
                SELECT *
                INTO   p_wrk_stdkevi4.v_master_stdkevi4
                FROM  MASTER_STDKEVI4
-               WHERE customer_no = p_stdkevi4.v_master_stdkevi4.customer_no
+               WHERE customer_reference = p_stdkevi4.v_master_stdkevi4.customer_reference
                 FOR UPDATE NOWAIT;
             EXCEPTION
                WHEN RECORD_LOCKED THEN
@@ -1333,7 +1397,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
                SELECT *
                INTO   p_Wrk_stdkevi4.v_master_stdkevi4
                FROM  MASTER_STDKEVI4
-               WHERE customer_no = p_stdkevi4.v_master_stdkevi4.customer_no
+               WHERE customer_reference = p_stdkevi4.v_master_stdkevi4.customer_reference
                ;
             EXCEPTION
                WHEN no_data_found THEN
@@ -1351,7 +1415,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
                SELECT *
                INTO p_Wrk_stdkevi4.v_master_stdkevi4
                FROM   MASTER_STDKEVI4
-               WHERE customer_no = p_wrk_stdkevi4.v_master_stdkevi4.customer_no
+               WHERE customer_reference = p_wrk_stdkevi4.v_master_stdkevi4.customer_reference
                ;
             EXCEPTION
                WHEN OTHERS THEN
@@ -1426,7 +1490,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
 
          Dbg('Inserting Into MASTER_STDKEVI4..');
          BEGIN
-            IF  p_wrk_stdkevi4.v_master_stdkevi4.customer_no IS NOT NULL THEN
+            IF  p_wrk_stdkevi4.v_master_stdkevi4.customer_reference IS NOT NULL THEN
                Dbg('Record Sent..');
                INSERT INTO  MASTER_STDKEVI4
                VALUES p_wrk_stdkevi4.v_master_stdkevi4;
@@ -1464,7 +1528,9 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
             CCY = p_Wrk_stdkevi4.v_master_stdkevi4.CCY,
             CUSTOMER_ACCOUNT = p_Wrk_stdkevi4.v_master_stdkevi4.CUSTOMER_ACCOUNT,
             CUSTOMER_NAME = p_Wrk_stdkevi4.v_master_stdkevi4.CUSTOMER_NAME,
+            CUSTOMER_NO = p_Wrk_stdkevi4.v_master_stdkevi4.CUSTOMER_NO,
             C_DATE = p_Wrk_stdkevi4.v_master_stdkevi4.C_DATE,
+            DESCRIPTION_REFERENCE = p_Wrk_stdkevi4.v_master_stdkevi4.DESCRIPTION_REFERENCE,
             EMAIL = p_Wrk_stdkevi4.v_master_stdkevi4.EMAIL,
             PHONE_NUMBER = p_Wrk_stdkevi4.v_master_stdkevi4.PHONE_NUMBER,
             PRIORITY = p_Wrk_stdkevi4.v_master_stdkevi4.PRIORITY,
@@ -1476,7 +1542,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_main AS
             RECORD_STAT = p_Wrk_stdkevi4.v_master_stdkevi4.RECORD_STAT,
             AUTH_STAT = p_Wrk_stdkevi4.v_master_stdkevi4.AUTH_STAT,
             ONCE_AUTH = p_Wrk_stdkevi4.v_master_stdkevi4.ONCE_AUTH
-WHERE customer_no = p_Wrk_stdkevi4.v_master_stdkevi4.customer_no
+WHERE customer_reference = p_Wrk_stdkevi4.v_master_stdkevi4.customer_reference
 ;
          EXCEPTION
             WHEN OTHERS THEN
@@ -1540,7 +1606,7 @@ WHERE customer_no = p_Wrk_stdkevi4.v_master_stdkevi4.customer_no
             FOR l_index IN 1 .. l_del_count LOOP
                Dbg('Deleting Record...');
                DELETE DETAIL_STDKEVI4
-               WHERE customer_no = D_v_detail_stdkevi4(l_index).customer_no
+               WHERE customer_reference = D_v_detail_stdkevi4(l_index).customer_reference
                 AND customer_id = D_v_detail_stdkevi4(l_index).customer_id
                ;
             END LOOP;
@@ -1572,7 +1638,7 @@ WHERE customer_no = p_Wrk_stdkevi4.v_master_stdkevi4.customer_no
                   DETAIL_USER = U_v_detail_stdkevi4(l_index).DETAIL_USER,
                   D_DATE = U_v_detail_stdkevi4(l_index).D_DATE,
                   SUBJECT = U_v_detail_stdkevi4(l_index).SUBJECT
-WHERE customer_no = U_v_detail_stdkevi4(l_index).customer_no
+WHERE customer_reference = U_v_detail_stdkevi4(l_index).customer_reference
  AND customer_id = U_v_detail_stdkevi4(l_index).customer_id
 ;
                EXCEPTION
@@ -1591,21 +1657,21 @@ WHERE customer_no = U_v_detail_stdkevi4(l_index).customer_no
 
          
          DELETE DETAIL_STDKEVI4
-         WHERE customer_no = p_Wrk_stdkevi4.v_master_stdkevi4.customer_no
+         WHERE customer_reference = p_Wrk_stdkevi4.v_master_stdkevi4.customer_reference
          ;
 
-         DELETE MASTER_STDKEVI4 WHERE customer_no = p_Wrk_stdkevi4.v_master_stdkevi4.customer_no
+         DELETE MASTER_STDKEVI4 WHERE customer_reference = p_Wrk_stdkevi4.v_master_stdkevi4.customer_reference
          ;
 
 
       ELSIF p_Action_Code IN (Cspks_Req_Global.p_Auth,Cspks_Req_Global.p_Close,Cspks_Req_Global.p_Reopen ) THEN
-         l_key := Cspks_Req_Utils.Fn_Get_Item_Desc(p_source,g_ui_name,'MASTER_STDKEVI4.CUSTOMER_NO')||'-'||
-         p_Wrk_stdkevi4.v_master_stdkevi4.customer_no;
+         l_key := Cspks_Req_Utils.Fn_Get_Item_Desc(p_source,g_ui_name,'MASTER_STDKEVI4.CUSTOMER_REFERENCE')||'-'||
+         p_Wrk_stdkevi4.v_master_stdkevi4.customer_reference;
          BEGIN
             SELECT ROWID
             INTO   l_row_id
             FROM  MASTER_STDKEVI4
-            WHERE customer_no = p_Wrk_stdkevi4.v_master_stdkevi4.customer_no
+            WHERE customer_reference = p_Wrk_stdkevi4.v_master_stdkevi4.customer_reference
             ;
          EXCEPTION
             WHEN No_Data_Found THEN
@@ -1778,8 +1844,8 @@ WHERE customer_no = U_v_detail_stdkevi4(l_index).customer_no
    BEGIN
 
       Dbg('In Fn_Get_Key_Information..');
-      l_Key_Cols := 'CUSTOMER_NO~';
-      l_Key_Vals := p_stdkevi4.v_master_stdkevi4.customer_no||'~';
+      l_Key_Cols := 'CUSTOMER_REFERENCE~';
+      l_Key_Vals := p_stdkevi4.v_master_stdkevi4.customer_reference||'~';
       Dbg('Calling Cspks_Req_Utils.Fn_Get_Key_Information..');
       IF NOT Cspks_Req_Utils.Fn_Get_Key_Information(p_Source,
          p_Source_Operation,
@@ -2270,6 +2336,8 @@ WHERE customer_no = U_v_detail_stdkevi4(l_index).customer_no
                p_Record_Master.CHAR_FLD_5 := l_Summary_Rec.EMAIL;
                p_Record_Master.NUM_FLD_2 := l_Summary_Rec.PHONE_NUMBER;
                p_Record_Master.CHAR_FLD_6 := l_Summary_Rec.PRIORITY;
+               p_Record_Master.CHAR_FLD_7 := l_Summary_Rec.CUSTOMER_REFERENCE;
+               p_Record_Master.CHAR_FLD_8 := l_Summary_Rec.DESCRIPTION_REFERENCE;
             END IF;
          END IF;
       END IF;
@@ -2439,18 +2507,18 @@ WHERE customer_no = U_v_detail_stdkevi4(l_index).customer_no
                l_Prev_Found := FALSE;
                l_Wrk_Found := FALSE;
 
-               IF p_Prev_stdkevi4.v_master_stdkevi4.customer_no IS NOT NULL THEN
+               IF p_Prev_stdkevi4.v_master_stdkevi4.customer_reference IS NOT NULL THEN
                   Dbg('Record Has Been Sent..');
                   l_prev_found := TRUE;
                END IF;
-               IF p_Wrk_stdkevi4.v_master_stdkevi4.customer_no IS NOT NULL THEN
+               IF p_Wrk_stdkevi4.v_master_stdkevi4.customer_reference IS NOT NULL THEN
                   Dbg('Record Has Been Sent..');
                   l_Wrk_Found := TRUE;
                END IF;
                IF l_Prev_Found   THEN
-                  l_Dtl_key := '~MASTER_STDKEVI4~'||p_Prev_stdkevi4.v_master_stdkevi4.customer_no||'~';
+                  l_Dtl_key := '~MASTER_STDKEVI4~'||p_Prev_stdkevi4.v_master_stdkevi4.customer_reference||'~';
                ELSIF l_Wrk_Found   THEN
-                  l_Dtl_key := '~MASTER_STDKEVI4~'||p_Wrk_stdkevi4.v_master_stdkevi4.customer_no||'~';
+                  l_Dtl_key := '~MASTER_STDKEVI4~'||p_Wrk_stdkevi4.v_master_stdkevi4.customer_reference||'~';
                END IF;
                IF l_Wrk_Found  OR l_Prev_Found THEN
                   IF l_Wrk_Found  AND l_Prev_Found THEN
@@ -2465,7 +2533,9 @@ Pr_Log_Change('CCY',l_Rec_Action,p_Prev_stdkevi4.v_master_stdkevi4.ccy,p_Wrk_std
 Pr_Log_Change('CUSTOMER_ACCOUNT',l_Rec_Action,p_Prev_stdkevi4.v_master_stdkevi4.customer_account,p_Wrk_stdkevi4.v_master_stdkevi4.customer_account);
 Pr_Log_Change('CUSTOMER_NAME',l_Rec_Action,p_Prev_stdkevi4.v_master_stdkevi4.customer_name,p_Wrk_stdkevi4.v_master_stdkevi4.customer_name);
 Pr_Log_Change('CUSTOMER_NO',l_Rec_Action,p_Prev_stdkevi4.v_master_stdkevi4.customer_no,p_Wrk_stdkevi4.v_master_stdkevi4.customer_no);
+Pr_Log_Change('CUSTOMER_REFERENCE',l_Rec_Action,p_Prev_stdkevi4.v_master_stdkevi4.customer_reference,p_Wrk_stdkevi4.v_master_stdkevi4.customer_reference);
 Pr_Log_Change('C_DATE',l_Rec_Action,p_Prev_stdkevi4.v_master_stdkevi4.c_date,p_Wrk_stdkevi4.v_master_stdkevi4.c_date);
+Pr_Log_Change('DESCRIPTION_REFERENCE',l_Rec_Action,p_Prev_stdkevi4.v_master_stdkevi4.description_reference,p_Wrk_stdkevi4.v_master_stdkevi4.description_reference);
 Pr_Log_Change('EMAIL',l_Rec_Action,p_Prev_stdkevi4.v_master_stdkevi4.email,p_Wrk_stdkevi4.v_master_stdkevi4.email);
 Pr_Log_Change('PHONE_NUMBER',l_Rec_Action,p_Prev_stdkevi4.v_master_stdkevi4.phone_number,p_Wrk_stdkevi4.v_master_stdkevi4.phone_number);
 Pr_Log_Change('PRIORITY',l_Rec_Action,p_Prev_stdkevi4.v_master_stdkevi4.priority,p_Wrk_stdkevi4.v_master_stdkevi4.priority);
@@ -2488,7 +2558,7 @@ Pr_Log_Change('ONCE_AUTH',l_Rec_Action,p_Prev_stdkevi4.v_master_stdkevi4.once_au
                l_Prev_Count      := p_Prev_stdkevi4.v_detail_stdkevi4.COUNT;
                IF l_Wrk_count > 0 THEN
                   FOR l_Index IN 1..l_Wrk_count  LOOP
-                     l_Dtl_key := '~DETAIL_STDKEVI4~'||p_wrk_stdkevi4.v_detail_stdkevi4(l_index).customer_no||'~'||p_wrk_stdkevi4.v_detail_stdkevi4(l_index).customer_id||'~';
+                     l_Dtl_key := '~DETAIL_STDKEVI4~'||p_wrk_stdkevi4.v_detail_stdkevi4(l_index).customer_reference||'~'||p_wrk_stdkevi4.v_detail_stdkevi4(l_index).customer_id||'~';
                      l_Rec_Found := FALSE;
                      l_Rec_Modified := FALSE;
                      IF l_Prev_count > 0 THEN
@@ -2538,7 +2608,7 @@ Pr_Log_Change('SUBJECT','N',NULL,p_wrk_stdkevi4.v_detail_stdkevi4(l_Index).subje
                      END IF;
                      IF NOT l_Rec_Found THEN
                         Dbg('Record Deleted..');
-                        l_Dtl_key := '~DETAIL_STDKEVI4~'||p_Prev_stdkevi4.v_detail_stdkevi4(l_Index).customer_no||'~'||p_Prev_stdkevi4.v_detail_stdkevi4(l_Index).customer_id||'~';
+                        l_Dtl_key := '~DETAIL_STDKEVI4~'||p_Prev_stdkevi4.v_detail_stdkevi4(l_Index).customer_reference||'~'||p_Prev_stdkevi4.v_detail_stdkevi4(l_Index).customer_id||'~';
                         Pr_Log_Change('CUSTOMER_ID','D',p_Prev_stdkevi4.v_detail_stdkevi4(l_Index).customer_id,NULL);
 Pr_Log_Change('DETAIL_DESCRIPTION','D',p_Prev_stdkevi4.v_detail_stdkevi4(l_Index).detail_description,NULL);
 Pr_Log_Change('DETAIL_USER','D',p_Prev_stdkevi4.v_detail_stdkevi4(l_Index).detail_user,NULL);
@@ -2727,8 +2797,8 @@ Pr_Log_Change('SUBJECT','D',p_Prev_stdkevi4.v_detail_stdkevi4(l_Index).subject,N
       p_Node_Data(l_Cntr).Node_Parent := '';
       p_Node_Data(l_Cntr).Node_Relation_Type := '1';
       p_Node_Data(l_Cntr).Query_Node := '0';
-      p_Node_Data(l_Cntr).Node_Fields := 'AMOUNT~CCY~CUSTOMER_ACCOUNT~CUSTOMER_NAME~CUSTOMER_NO~C_DATE~EMAIL~PHONE_NUMBER~PRIORITY~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH~';
-      p_Node_Data(l_Cntr).Node_Tags := 'AMOUNT~CCYY~ACCOPT~CUSTOMER_NAME~CUSTOMER_NO~INCORPDT~EMAIL~PHONE_NUMBER~PRIORITY~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH~';
+      p_Node_Data(l_Cntr).Node_Fields := 'AMOUNT~CCY~CUSTOMER_ACCOUNT~CUSTOMER_NAME~CUSTOMER_NO~C_DATE~EMAIL~PHONE_NUMBER~PRIORITY~CUSTOMER_REFERENCE~DESCRIPTION_REFERENCE~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH~';
+      p_Node_Data(l_Cntr).Node_Tags := 'AMOUNT~CCYY~ACCOPT~CUSTOMER_NAME~CUSTOMER_NO~INCORPDT~EMAIL~PHONE_NUMBER~PRIORITY~REFERENCE~FLDDES~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH~';
 
       l_Cntr  := Nvl(p_Node_Data.Count,0) + 1;
       p_Node_Data(l_Cntr).Node_Name := 'BLK_DETAIL';
@@ -2736,17 +2806,8 @@ Pr_Log_Change('SUBJECT','D',p_Prev_stdkevi4.v_detail_stdkevi4(l_Index).subject,N
       p_Node_Data(l_Cntr).Node_Parent := 'BLK_MASTER';
       p_Node_Data(l_Cntr).Node_Relation_Type := 'N';
       p_Node_Data(l_Cntr).Query_Node := '0';
-      p_Node_Data(l_Cntr).Node_Fields := 'CUSTOMER_ID~CUSTOMER_NO~DETAIL_DESCRIPTION~DETAIL_USER~D_DATE~SUBJECT~';
-      p_Node_Data(l_Cntr).Node_Tags := 'CUSTOMER_ID~CUSTOMER_NO~FILE_CON_CDE_DESC~USER~INCORPDT~SUBJECT~';
-
-      l_Cntr  := Nvl(p_Node_Data.Count,0) + 1;
-      p_Node_Data(l_Cntr).Node_Name := 'BLK_HEADER';
-      p_Node_Data(l_Cntr).Xsd_Node := 'Header';
-      p_Node_Data(l_Cntr).Node_Parent := '';
-      p_Node_Data(l_Cntr).Node_Relation_Type := '1';
-      p_Node_Data(l_Cntr).Query_Node := '0';
-      p_Node_Data(l_Cntr).Node_Fields := '';
-      p_Node_Data(l_Cntr).Node_Tags := '';
+      p_Node_Data(l_Cntr).Node_Fields := 'CUSTOMER_ID~CUSTOMER_REFERENCE~DETAIL_DESCRIPTION~DETAIL_USER~D_DATE~SUBJECT~';
+      p_Node_Data(l_Cntr).Node_Tags := 'CUSTOMER_ID~CUSTOMER_REFERENCE~FLDDES~USER~INCORPDT~SUBJECT~';
 
       Dbg('Returning From Fn_Get_Node_Data.. ');
       RETURN TRUE;

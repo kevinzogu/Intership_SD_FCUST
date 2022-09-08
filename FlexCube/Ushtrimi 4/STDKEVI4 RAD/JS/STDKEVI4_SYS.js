@@ -32,7 +32,7 @@ var criteriaSearch  = 'N';
 //----------------------------------------------------------------------------------------------------------------------
 //***** FCJ XML FOR THE SCREEN *****
 //----------------------------------------------------------------------------------------------------------------------
-var fieldNameArray = {"BLK_MASTER":"AMOUNT~CCY~CUSTOMER_ACCOUNT~CUSTOMER_NAME~CUSTOMER_NO~C_DATE~EMAIL~PHONE_NUMBER~PRIORITY~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH","BLK_DETAIL":"CUSTOMER_ID~CUSTOMER_NO~DETAIL_DESCRIPTION~DETAIL_USER~D_DATE~SUBJECT","BLK_HEADER":""};
+var fieldNameArray = {"BLK_MASTER":"AMOUNT~CCY~CUSTOMER_ACCOUNT~CUSTOMER_NAME~CUSTOMER_NO~C_DATE~EMAIL~PHONE_NUMBER~PRIORITY~CUSTOMER_REFERENCE~DESCRIPTION_REFERENCE~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH","BLK_DETAIL":"CUSTOMER_ID~CUSTOMER_REFERENCE~DETAIL_DESCRIPTION~DETAIL_USER~D_DATE~SUBJECT"};
 
 var multipleEntryPageSize = {"BLK_DETAIL" :"15" };
 
@@ -42,9 +42,8 @@ var tabMEBlks = {"CVS_MAIN__TAB_DETAIL":"BLK_DETAIL"};
 
 var msgxml=""; 
 msgxml += '    <FLD>'; 
-msgxml += '      <FN PARENT="" RELATION_TYPE="1" TYPE="BLK_MASTER">AMOUNT~CCY~CUSTOMER_ACCOUNT~CUSTOMER_NAME~CUSTOMER_NO~C_DATE~EMAIL~PHONE_NUMBER~PRIORITY~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH</FN>'; 
-msgxml += '      <FN PARENT="BLK_MASTER" RELATION_TYPE="N" TYPE="BLK_DETAIL">CUSTOMER_ID~CUSTOMER_NO~DETAIL_DESCRIPTION~DETAIL_USER~D_DATE~SUBJECT</FN>'; 
-msgxml += '      <FN PARENT="" RELATION_TYPE="1" TYPE="BLK_HEADER"></FN>'; 
+msgxml += '      <FN PARENT="" RELATION_TYPE="1" TYPE="BLK_MASTER">AMOUNT~CCY~CUSTOMER_ACCOUNT~CUSTOMER_NAME~CUSTOMER_NO~C_DATE~EMAIL~PHONE_NUMBER~PRIORITY~CUSTOMER_REFERENCE~DESCRIPTION_REFERENCE~MAKER~MAKERSTAMP~CHECKER~CHECKERSTAMP~MODNO~TXNSTAT~AUTHSTAT~ONCEAUTH</FN>'; 
+msgxml += '      <FN PARENT="BLK_MASTER" RELATION_TYPE="N" TYPE="BLK_DETAIL">CUSTOMER_ID~CUSTOMER_REFERENCE~DETAIL_DESCRIPTION~DETAIL_USER~D_DATE~SUBJECT</FN>'; 
 msgxml += '    </FLD>'; 
 
 var strScreenName = "CVS_MAIN";
@@ -58,7 +57,7 @@ var originSystem = "";
 //----------------------------------------------------------------------------------------------------------------------
 var msgxml_sum=""; 
 msgxml_sum += '    <FLD>'; 
-msgxml_sum += '      <FN PARENT="" RELATION_TYPE="1" TYPE="BLK_MASTER">AUTHSTAT~TXNSTAT~AMOUNT~CCY~CUSTOMER_ACCOUNT~CUSTOMER_NAME~CUSTOMER_NO~C_DATE~EMAIL~PHONE_NUMBER~PRIORITY</FN>'; 
+msgxml_sum += '      <FN PARENT="" RELATION_TYPE="1" TYPE="BLK_MASTER">AUTHSTAT~TXNSTAT~AMOUNT~CCY~CUSTOMER_ACCOUNT~CUSTOMER_NAME~CUSTOMER_NO~C_DATE~EMAIL~PHONE_NUMBER~PRIORITY~CUSTOMER_REFERENCE~DESCRIPTION_REFERENCE</FN>'; 
 msgxml_sum += '    </FLD>'; 
 
 var detailFuncId = "STDKEVI4";
@@ -71,9 +70,9 @@ var g_SummaryBlock ="BLK_MASTER";
 //----------------------------------------------------------------------------------------------------------------------
 //***** CODE FOR DATABINDING *****
 //----------------------------------------------------------------------------------------------------------------------
- var relationArray = {"BLK_MASTER" : "","BLK_DETAIL" : "BLK_MASTER~N","BLK_HEADER" : ""}; 
+ var relationArray = {"BLK_MASTER" : "","BLK_DETAIL" : "BLK_MASTER~N"}; 
 
- var dataSrcLocationArray = new Array("BLK_MASTER","BLK_DETAIL","BLK_HEADER"); 
+ var dataSrcLocationArray = new Array("BLK_MASTER","BLK_DETAIL"); 
  // Array of all Data Sources used in the screen 
 //----------------------------------------------------------------------------------------------------------------------
 //***** CODE FOR QUERY MODE *****
@@ -84,12 +83,13 @@ var intCurrentQueryRecordCount = 0;
 
 var queryFields = new Array();    //Values should be set inside STDKEVI4.js, in "BlockName__FieldName" format
 var pkFields    = new Array();    //Values should be set inside STDKEVI4.js, in "BlockName__FieldName" format
-queryFields[0] = "BLK_MASTER__CUSTOMER_NO";
-pkFields[0] = "BLK_MASTER__CUSTOMER_NO";
+queryFields[0] = "BLK_MASTER__CUSTOMER_REFERENCE";
+pkFields[0] = "BLK_MASTER__CUSTOMER_REFERENCE";
 //----------------------------------------------------------------------------------------------------------------------
 //***** CODE FOR AMENDABLE/SUBSYSTEM Fields *****
 //----------------------------------------------------------------------------------------------------------------------
-var modifyAmendArr = new Array(); 
+//***** Fields Amendable while Modification *****
+var modifyAmendArr = {"BLK_DETAIL":["CUSTOMER_ID","CUSTOMER_REFERENCE","DETAIL_DESCRIPTION","DETAIL_USER","D_DATE","SUBJECT"],"BLK_MASTER":["AMOUNT","CCY","CUSTOMER_ACCOUNT","CUSTOMER_NAME","CUSTOMER_NO","CUSTOMER_REFERENCE","C_DATEI","DESCRIPTION_REFERENCE","EMAIL","PHONE_NUMBER","PRIORITY"]};
 var closeAmendArr = new Array(); 
 var reopenAmendArr = new Array(); 
 var reverseAmendArr = new Array(); 
@@ -97,7 +97,8 @@ var deleteAmendArr = new Array();
 var rolloverAmendArr = new Array(); 
 var confirmAmendArr = new Array(); 
 var liquidateAmendArr = new Array(); 
-var queryAmendArr = new Array(); 
+//***** Fields Amendable while Query *****
+var queryAmendArr = {"BLK_DETAIL":["CUSTOMER_ID","CUSTOMER_REFERENCE","DETAIL_DESCRIPTION","DETAIL_USER","D_DATE","SUBJECT"],"BLK_MASTER":["AMOUNT","CCY","CUSTOMER_ACCOUNT","CUSTOMER_NAME","CUSTOMER_NO","CUSTOMER_REFERENCE","C_DATEI","DESCRIPTION_REFERENCE","EMAIL","PHONE_NUMBER","PRIORITY"]};
 var authorizeAmendArr = new Array(); 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -107,7 +108,7 @@ var subsysArr    = new Array();
 
 //***** CODE FOR LOVs *****
 //----------------------------------------------------------------------------------------------------------------------
-var lovInfoFlds = {"BLK_MASTER__CUSTOMER_NO__LOV_CUSTOMER":["BLK_MASTER__CUSTOMER_NAME~~BLK_MASTER__PHONE_NUMBER~BLK_MASTER__EMAIL~","","N~N~N~N",""]};
+var lovInfoFlds = {"BLK_MASTER__CCY__LOV_CCY":["BLK_MASTER__CCY~","","N",""],"BLK_MASTER__CUSTOMER_ACCOUNT__LOV_ACCOUNTTT":["BLK_MASTER__CUSTOMER_ACCOUNT~~~","BLK_MASTER__CCY!VARCHAR2","N~N~N",""],"BLK_MASTER__CUSTOMER_NO__LOV_CUSTOMERR":["BLK_MASTER__CUSTOMER_NO~BLK_MASTER__CUSTOMER_NAME~BLK_MASTER__PHONE_NUMBER~BLK_MASTER__EMAIL~","","N~N~N~N",""]};
 var offlineLovInfoFlds = {};
 //----------------------------------------------------------------------------------------------------------------------
 //***** SCRIPT FOR TABS *****
