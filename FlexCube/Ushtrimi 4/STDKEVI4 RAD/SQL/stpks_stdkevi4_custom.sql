@@ -167,7 +167,8 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_custom AS
                Dbg('Priority Low');
             END IF;
             
-            IF GLOBAL.application_date < p_Wrk_stdkevi4.v_master_stdkevi4.C_DATE THEN
+            dbg('sysdate '||sysdate);
+            IF sysdate < p_Wrk_stdkevi4.v_master_stdkevi4.C_DATE THEN
               Pr_Log_Error(p_Function_Id,p_Source ,'stdkevi3' , Null);
               
             END IF;
