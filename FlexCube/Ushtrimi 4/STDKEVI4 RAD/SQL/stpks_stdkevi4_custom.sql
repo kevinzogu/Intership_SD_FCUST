@@ -173,10 +173,7 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_custom AS
             END IF;
             
       END IF;
-      
-       IF p_Action_Code = 'EXECUTEQUERY' then
-         dbg('p_stdkevi4.v_master_stdkevi4.CUSTOMER_REFERENCE : ' || p_stdkevi4.v_master_stdkevi4.CUSTOMER_REFERENCE);
-         end if;
+
       Dbg('Returning Success From fn_pre_default_and_validate..');
       RETURN TRUE;
    EXCEPTION
