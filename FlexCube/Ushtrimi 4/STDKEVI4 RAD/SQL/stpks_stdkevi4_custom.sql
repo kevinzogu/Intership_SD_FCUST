@@ -93,13 +93,17 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_custom AS
             p_stdkevi4.v_master_stdkevi4.CUSTOMER_REFERENCE := ( global.user_id || STDKEVI4_SEQ_R.nextval);
     END IF;
     
-    IF p_Action_Code = 'NEW' THEN
+    IF p_Action_Code = 'NEW' OR p_Action_Code = 'MODIFY' THEN
       
        FOR I IN 1 .. p_stdkevi4.v_detail_stdkevi4.COUNT  LOOP
+         
         p_stdkevi4.v_detail_stdkevi4(I).CUSTOMER_REFERENCE := p_stdkevi4.v_master_stdkevi4.CUSTOMER_REFERENCE;
+        IF         p_stdkevi4.v_detail_stdkevi4(I).CUSTOMER_ID IS NULL THEN
+          
         p_stdkevi4.v_detail_stdkevi4(I).CUSTOMER_ID := STDKEVI4_SEQ.nextval;
-    end loop;
-    end if;
+        END IF;
+    END LOOP;
+    END IF;
       Dbg('Returning Success From Fn_Pre_Check_Mandatory..');
       RETURN TRUE;
    EXCEPTION
@@ -167,8 +171,8 @@ CREATE OR REPLACE PACKAGE BODY stpks_stdkevi4_custom AS
                Dbg('Priority Low');
             END IF;
             
-            dbg('sysdate '||sysdate);
-            IF sysdate < p_Wrk_stdkevi4.v_master_stdkevi4.C_DATE THEN
+            dbg('GLOBAL.application_date'||GLOBAL.application_date);
+            IF GLOBAL.application_date < p_Wrk_stdkevi4.v_master_stdkevi4.C_DATE THEN
               Pr_Log_Error(p_Function_Id,p_Source ,'stdkevi3' , Null);
               
             END IF;
