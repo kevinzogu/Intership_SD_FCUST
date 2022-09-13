@@ -57,12 +57,12 @@ public class ClientServicelmpl implements ClientService {
     }
 
     @Override
-    public void deleteClient(long clientId) {
-        Optional<Client> clientDB = this.clientRepository.findById(clientId);
+    public void deleteClient(long clienId) {
+        Optional<Client> clientDB = this.clientRepository.findById(clienId);
         if (clientDB.isPresent()) {
             this.clientRepository.delete(clientDB.get());
         }else{
-            throw new ResourceNotFoundException("Record not found with id : " + clientId);
+            throw new ResourceNotFoundException("Record not found with id : " + clienId);
         }
     }
 }

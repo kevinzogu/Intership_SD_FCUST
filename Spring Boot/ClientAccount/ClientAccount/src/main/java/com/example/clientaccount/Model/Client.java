@@ -1,6 +1,7 @@
 package com.example.clientaccount.Model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Clients")
@@ -79,6 +80,29 @@ public class Client {
         this.category = category;
     }
 
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", no='" + no + '\'' +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", type='" + type + '\'' +
+                ", category='" + category + '\'' +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return id.equals(client.id) && no.equals(client.no) && name.equals(client.name) && phone.equals(client.phone) && email.equals(client.email) && type.equals(client.type) && category.equals(client.category);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, no, name, phone, email, type, category);
+    }
 }

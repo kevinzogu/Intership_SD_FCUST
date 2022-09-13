@@ -13,6 +13,6 @@ public interface ClientService {
 
     Client getClientById(Long clienId);
 
-    void deleteClient(long id);
+    void deleteClient(long clienId);
 
 }
