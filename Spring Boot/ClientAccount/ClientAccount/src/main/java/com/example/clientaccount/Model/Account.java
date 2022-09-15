@@ -1,6 +1,7 @@
 package com.example.clientaccount.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,7 +29,8 @@ public class Account implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "clientNo", referencedColumnName = "clientNo",insertable = false,updatable = false)
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonIgnoreProperties("account")
     public Client client;
 
 
