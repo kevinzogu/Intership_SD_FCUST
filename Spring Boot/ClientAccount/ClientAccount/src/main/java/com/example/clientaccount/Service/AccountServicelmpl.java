@@ -43,7 +43,7 @@ public class AccountServicelmpl implements AccountService{
 
     @Override
     public List<Account> getAllAccount() {
-        return this.accountRepository.findAll();
+        return (List<Account>) this.accountRepository.findAll();
     }
 
     @Override

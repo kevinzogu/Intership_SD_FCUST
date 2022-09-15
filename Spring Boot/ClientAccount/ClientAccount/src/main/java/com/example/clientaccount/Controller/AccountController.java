@@ -21,7 +21,6 @@ public class AccountController {
     }
     @GetMapping("/accounts")
     ResponseEntity<List<Account>> getAllAccount(){
-
         return ResponseEntity.ok().body(accountService.getAllAccount());
     }
 
@@ -35,6 +34,7 @@ public class AccountController {
         account.setAccountId(id);
         return ResponseEntity.ok().body(this.accountService.updateAccount(account));
     }
+
     @DeleteMapping("/accounts/{id}")
     public HttpStatus deleteAccount(@PathVariable long id, @RequestBody Account account){
         this.accountService.deleteAccount(id);

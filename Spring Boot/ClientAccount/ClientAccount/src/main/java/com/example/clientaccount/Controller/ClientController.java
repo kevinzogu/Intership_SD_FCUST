@@ -19,6 +19,7 @@ public class ClientController {
     ResponseEntity<Client> getClientById(@PathVariable long id){
         return ResponseEntity.ok().body(clientService.getClientById(id));
     }
+
     @GetMapping("/clients")
     ResponseEntity<List<Client>> getAllClient(){
         return ResponseEntity.ok().body(clientService.getAllClient());

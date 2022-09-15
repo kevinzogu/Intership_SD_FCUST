@@ -34,6 +34,7 @@ public class ClientServicelmpl implements ClientService {
             clientUpdate.setEmail(client.getEmail());
             clientUpdate.setType(client.getType());
             clientUpdate.setCategory(client.getCategory());
+            clientUpdate.setAccount(client.getAccount());
             clientRepository.save(clientUpdate);
             return clientUpdate;
         }else{
@@ -43,7 +44,7 @@ public class ClientServicelmpl implements ClientService {
 
     @Override
     public List<Client> getAllClient() {
-        return this.clientRepository.findAll();
+        return (List<Client>) this.clientRepository.findAll();
     }
 
     @Override

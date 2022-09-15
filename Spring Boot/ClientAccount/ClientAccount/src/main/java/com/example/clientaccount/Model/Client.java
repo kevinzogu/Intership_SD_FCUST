@@ -1,43 +1,72 @@
 package com.example.clientaccount.Model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "Clients")
-public class Client {
+@Table(name = "clients")
+public class Client implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Long id;
-    @Column(name = "no")
-    private String no;
+    @Column(name = "clientId")
+    public Long clientId;
+    @Column(name = "clientNo")
+    public String clientNo;
     @Column(name = "name")
-    private String name;
+    public String name;
     @Column(name = "phone")
-    private String phone;
+    public String phone;
     @Column(name = "email")
-    private String email;
+    public String email;
     @Column(name = "type")
-    private String type;
+    public String type;
     @Column(name = "category")
-    private String category;
+    public String category;
+
+
+    @OneToMany(mappedBy ="client" ,cascade = CascadeType.ALL,orphanRemoval = true)
+   @JsonManagedReference
+    public List<Account> account;
+
+    public Client(String clientNo, String name, String phone, String email, String type, String category, List<Account> account) {
+        this.clientNo = clientNo;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.type = type;
+        this.category = category;
+        this.account = account;
+    }
+
+    public Client() {
+    }
+
+    public List<Account> getAccount() {
+        return account;
+    }
+
+    public void setAccount(List<Account> accounts) {
+        this.account = accounts;
+    }
 
     public Long getId() {
-        return id;
+        return clientId;
     }
 
     public Client setId(Long id) {
-        this.id = id;
+        this.clientId = id;
         return null;
     }
 
     public String getNo() {
-        return no;
+        return clientNo;
     }
 
     public void setNo(String no) {
-        this.no = no;
+        this.clientNo = no;
     }
 
     public String getName() {
@@ -83,8 +112,8 @@ public class Client {
     @Override
     public String toString() {
         return "Client{" +
-                "id=" + id +
-                ", no='" + no + '\'' +
+                "id=" + clientId +
+                ", no='" + clientNo + '\'' +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
@@ -98,11 +127,11 @@ public class Client {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return id.equals(client.id) && no.equals(client.no) && name.equals(client.name) && phone.equals(client.phone) && email.equals(client.email) && type.equals(client.type) && category.equals(client.category);
+        return client.equals(client.clientId) && clientNo.equals(client.clientNo) && name.equals(client.name) && phone.equals(client.phone) && email.equals(client.email) && type.equals(client.type) && category.equals(client.category);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, no, name, phone, email, type, category);
+        return Objects.hash(clientId, clientNo, name, phone, email, type, category);
     }
 }
