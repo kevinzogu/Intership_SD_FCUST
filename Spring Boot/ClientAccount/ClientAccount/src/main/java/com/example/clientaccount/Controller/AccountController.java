@@ -30,7 +30,7 @@ public class AccountController {
     }
 
     @PutMapping("/accounts/{id}")
-    public ResponseEntity<Account> updateAccount(long id,@RequestBody Account account){
+    public ResponseEntity<Account> updateAccount(@PathVariable long id,@RequestBody Account account){
         account.setAccountId(id);
         return ResponseEntity.ok().body(this.accountService.updateAccount(account));
     }

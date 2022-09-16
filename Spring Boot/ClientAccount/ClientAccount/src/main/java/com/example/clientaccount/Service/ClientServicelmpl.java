@@ -48,7 +48,7 @@ public class ClientServicelmpl implements ClientService {
     }
 
     @Override
-    public Client getClientById(Long clientId) {
+    public Client getClientById(long clientId) {
         Optional<Client> clientDB = this.clientRepository.findById(clientId);
         if (clientDB.isPresent()) {
             return clientDB.get();

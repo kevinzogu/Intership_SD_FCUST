@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "clients")
@@ -29,7 +28,7 @@ public class Client implements Serializable {
     public String category;
 
 
-    @OneToMany(mappedBy ="client" ,cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy ="client"/* , cascade = CascadeType.ALL*/,orphanRemoval = true,fetch = FetchType.LAZY)
     @JsonIgnoreProperties("client")
    //@JsonManagedReference
     public List<Account> account;
