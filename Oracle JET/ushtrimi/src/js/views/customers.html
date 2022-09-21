@@ -1,0 +1,87 @@
+<!--
+ Copyright (c) 2014, 2022, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+ <div>
+  <oj-form-layout max-columns="1" direction="row">
+      <oj-label for="input-name">Emri</oj-label>
+      <oj-input-text
+        id="input-name"
+        value="{{inputNameValue}}"
+        length.max="35"
+        length.count-by="codeUnit"
+        label-edge="inside">
+      </oj-input-text>
+
+      <oj-label for="input-surname">Mbiemri</oj-label>
+      <oj-input-text
+        id="input-surname"
+        value="{{inputSurnameValue}}"
+        raw-value=""
+        length.max="35"
+        length.count-by="codeUnit"
+        label-edge="inside">
+      </oj-input-text>
+
+  
+      <oj-label for="input-birthday">Ditelindja</oj-label>
+      <oj-input-date value="{{inputBirthdayValue}}" 
+      id="input-birthday"
+      autocomplete="off">
+      </oj-input-date>
+
+      <oj-label for="input-gender">Gjinia</oj-label>
+      <oj-select-single  
+      id="input-gender" 
+      value="{{inputGenderValue}}"
+      data="[[inputGenderDataProviter]]">
+    </oj-select-single>
+
+    <oj-label for="input-birthplace">Vendlindja</oj-label>
+    <oj-input-text
+      id="input-birthplace"
+      value="{{inputBirthplaceValue}}"
+      length.count-by="codeUnit"
+      label-edge="inside">
+    </oj-input-text>
+
+  <oj-label for="input-age">Mosha</oj-label>
+  <oj-input-number
+  value="{{inputAgeValue}}"
+  id="input-age"
+  min="0"
+  max="100"
+  step="0">
+</oj-input-number>
+<div class="oj-flex oj-sm-flex-items-initial oj-sm-justify-content-flex-end">
+  <div class="oj-flex-item oj-sm-padding-2x-horizontal">
+<oj-button id="save-button"
+on-oj-action="[[onCreateButtonClick]]"
+  chroming="danger">Ruaj
+</oj-button>
+</div>
+</div>
+</oj-form-layout>
+
+
+
+</div>
+  <div>
+    <oj-bind-text
+    value="[[inputNameValue]]">
+    </oj-bind-text>
+    <oj-bind-text
+    value="[[inputSurnameValue]]">
+    </oj-bind-text>
+    <oj-bind-text
+    value="[[inputGenderValue]]">
+    </oj-bind-text>
+    <oj-bind-text
+    value="[[inputBirthplaceValue]]">
+    </oj-bind-text>
+    <oj-bind-text
+    value="[[inputAgeValue]]">
+    </oj-bind-text>
+
+  </div>
