@@ -8,29 +8,3 @@
 /*
  * Your about ViewModel code goes here
  */
-define([
-  "knockout",
-  "ojs/ojtable"
-],
- function(ko) {
-    function AboutViewModel() {
-      "use strict";
-      
-      class ViewModel {
-          constructor() {
-              this.deptArray = JSON.parse(deptData);
-              this.dataprovider = new ArrayDataProvider(this.deptArray, {
-                  keyAttributes: "DepartmentId",
-                  implicitSort: [{ attribute: "DepartmentId", direction: "ascending" }],
-              });
-          }
-      }
-    }
-    /*
-     * Returns an instance of the ViewModel providing one instance of the ViewModel. If needed,
-     * return a constructor for the ViewModel so that the ViewModel is constructed
-     * each time the view is displayed.
-     */
-    return AboutViewModel;
-  }
-);

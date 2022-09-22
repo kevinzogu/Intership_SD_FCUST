@@ -11,6 +11,8 @@
 define([
 "knockout",
 "ojs/ojarraydataprovider",
+"ojs/ojbootstrap",
+"ojs/ojbufferingdataprovider",
 "ojs/ojinputtext",
 "ojs/ojdatetimepicker",
 "ojs/ojinputnumber",
@@ -18,14 +20,21 @@ define([
 "ojs/ojlabelvalue",
 "ojs/ojlabel",
 "ojs/ojselectsingle",
-"ojs/ojbutton"
+"ojs/ojbutton",
+"ojs/ojtable"
 ],
   (ko,
-    ArrayDataProvider) => {
+    ArrayDataProvider,
+    ojbootstrap_1,
+    BufferingDataProvider) => {
     function CustomerViewModel() {
       this._initValirable();
       this._initAllObservable();
       this.onCreateButtonClick=this._onCreateButtonClick.bind(this);
+      (0, ojbootstrap_1.whenDocumentReady)().then(() => {
+        const vm = new CustomerViewModel();
+        ko.applyBindings(vm, document.getElementById('table'));
+    });
     }
 
 /**
@@ -41,6 +50,11 @@ define([
       this.inputBirthplaceValue = ko.observable(null);
       this.inputGenderValue = ko.observable(null);
       this.onCreateButtonClick = ko.observable(null);
+      
+      this.dataFromSave = ko.observableArray([]);
+      this.dataprovider = new BufferingDataProvider(new ArrayDataProvider(this.dataFromSave, {
+        keyAttributes: 'emri'
+    }));
     }
 
     /**
@@ -49,7 +63,7 @@ define([
  */
 
     CustomerViewModel.prototype._initValirable = function(){
-this.inputGenderDataProviter=new ArrayDataProvider([
+this.inputGenderDataProvider=new ArrayDataProvider([
   {
   value: "djale",
   label: "Mashkull"
@@ -69,9 +83,27 @@ this.inputGenderDataProviter=new ArrayDataProvider([
  */
 
     CustomerViewModel.prototype._onCreateButtonClick = function(){
+      
+      let dataFromSave = [{
+      emri: this.inputNameValue(),
+      mbiemri : this.inputSurnameValue(),
+      ditelindja : this.inputBirthdayValue(),
+      gjinia : this.inputGenderValue(),
+      vendlindja : this.inputBirthplaceValue(),
+      mosha : this.inputAgeValue()
+    }];
+    
     alert("Button pressed");
-    }
 
-    return CustomerViewModel;
+    console.log(dataFromSave);
+
+    this.dataprovider.addItem({
+      metadata: { key: this.dataFromSave.emri },
+      data: this.dataFromSave
+  });
+    // this.arraytojson = JSON.parse(dataFromSave);
+  }
+  
+    return new CustomerViewModel();
   }
 );

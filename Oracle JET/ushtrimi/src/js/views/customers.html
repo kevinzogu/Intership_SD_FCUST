@@ -35,7 +35,7 @@
       <oj-select-single  
       id="input-gender" 
       value="{{inputGenderValue}}"
-      data="[[inputGenderDataProviter]]">
+      data="[[inputGenderDataProvider]]">
     </oj-select-single>
 
     <oj-label for="input-birthplace">Vendlindja</oj-label>
@@ -85,3 +85,43 @@ on-oj-action="[[onCreateButtonClick]]"
     </oj-bind-text>
 
   </div>
+
+
+<div>
+  <div id="sampleDemo" class="demo-padding demo-container">
+    <div id="componentDemoContent" style="width: 1px; min-width: 100%;">
+  <oj-table id="table" aria-label='Tabeleklienti'
+  columns-default.sortable="disabled"
+data='[[dataprovider]]'
+columns='[{"headerText": "emri", 
+            "field": "emri",
+            "headerClassName": "oj-sm-only-hide",
+            "className": "oj-sm-only-hide",
+            "resizable": "enabled"},
+            {"headerText": "mbiemer", 
+            "field": "mbiemri",
+            "resizable": "enabled"},
+            {"headerText": "ditelindja", 
+            "field": "ditelindja",
+            "headerClassName": "oj-sm-only-hide",
+            "className": "oj-sm-only-hide",
+            "resizable": "enabled"},
+            {"headerText": "gjinia", 
+            "field": "gjinia",
+            "headerClassName": "oj-sm-only-hide",
+            "className": "oj-sm-only-hide",
+            "resizable": "enabled"},
+            {"headerText": "vendlindja", 
+            "field": "vendlindja",
+            "headerClassName": "oj-sm-only-hide",
+            "className": "oj-sm-only-hide",
+            "resizable": "enabled"},
+            {"headerText": "mosha", 
+              "field": "mosha",
+              "headerClassName": "oj-sm-only-hide",
+              "className": "oj-sm-only-hide",
+              "resizable": "enabled"}]'
+style="width: 100%;">
+</oj-table>
+
+</div>
