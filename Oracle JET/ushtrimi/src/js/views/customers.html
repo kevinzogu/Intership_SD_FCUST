@@ -3,39 +3,48 @@
  Licensed under The Universal Permissive License (UPL), Version 1.0
  as shown at https://oss.oracle.com/licenses/upl/
  -->
+
+
+ <!--
+  Forma
+ -->
  <div>
   <oj-form-layout max-columns="1" direction="row">
-      <oj-label for="input-name">Emri</oj-label>
-      <oj-input-text
-        id="input-name"
-        value="{{inputNameValue}}"
-        length.max="35"
-        length.count-by="codeUnit"
-        label-edge="inside">
-      </oj-input-text>
+    <oj-label for="input-name">Emri</oj-label>
+    <oj-input-text
+      id="input-name"
+      value="{{inputNameValue}}"
+      length.max="35"
+      length.count-by="codeUnit"
+      label-edge="inside"
+    >
+    </oj-input-text>
 
-      <oj-label for="input-surname">Mbiemri</oj-label>
-      <oj-input-text
-        id="input-surname"
-        value="{{inputSurnameValue}}"
-        raw-value=""
-        length.max="35"
-        length.count-by="codeUnit"
-        label-edge="inside">
-      </oj-input-text>
+    <oj-label for="input-surname">Mbiemri</oj-label>
+    <oj-input-text
+      id="input-surname"
+      value="{{inputSurnameValue}}"
+      raw-value=""
+      length.max="35"
+      length.count-by="codeUnit"
+      label-edge="inside"
+    >
+    </oj-input-text>
 
-  
-      <oj-label for="input-birthday">Ditelindja</oj-label>
-      <oj-input-date value="{{inputBirthdayValue}}" 
+    <oj-label for="input-birthday">Ditelindja</oj-label>
+    <oj-input-date
+      value="{{inputBirthdayValue}}"
       id="input-birthday"
-      autocomplete="off">
-      </oj-input-date>
+      autocomplete="off"
+    >
+    </oj-input-date>
 
-      <oj-label for="input-gender">Gjinia</oj-label>
-      <oj-select-single  
-      id="input-gender" 
+    <oj-label for="input-gender">Gjinia</oj-label>
+    <oj-select-single
+      id="input-gender"
       value="{{inputGenderValue}}"
-      data="[[inputGenderDataProvider]]">
+      data="[[inputGenderDataProvider]]"
+    >
     </oj-select-single>
 
     <oj-label for="input-birthplace">Vendlindja</oj-label>
@@ -43,85 +52,104 @@
       id="input-birthplace"
       value="{{inputBirthplaceValue}}"
       length.count-by="codeUnit"
-      label-edge="inside">
+      label-edge="inside"
+    >
     </oj-input-text>
 
-  <oj-label for="input-age">Mosha</oj-label>
-  <oj-input-number
-  value="{{inputAgeValue}}"
-  id="input-age"
-  min="0"
-  max="100"
-  step="0">
-</oj-input-number>
-<div class="oj-flex oj-sm-flex-items-initial oj-sm-justify-content-flex-end">
-  <div class="oj-flex-item oj-sm-padding-2x-horizontal">
-<oj-button id="save-button"
-on-oj-action="[[onCreateButtonClick]]"
-  chroming="danger">Ruaj
-</oj-button>
+    <oj-label for="input-age">Mosha</oj-label>
+    <oj-input-number
+      value="{{inputAgeValue}}"
+      id="input-age"
+      min="0"
+      max="100"
+      step="0"
+    >
+    </oj-input-number>
+    <div
+      class="oj-flex oj-sm-flex-items-initial oj-sm-justify-content-flex-end"
+    >
+      <div class="oj-flex-item oj-sm-padding-2x-horizontal">
+        <oj-button
+          id="save-button"
+          on-oj-action="[[onCreateButtonClick]]"
+          chroming="danger"
+          >Ruaj
+        </oj-button>
+      </div>
+    </div>
+  </oj-form-layout>
 </div>
+
+<!--
+  afishim
+-->
+<div>
+  <h2>Input in real time</h2>
+
+  <oj-bind-text value="[[inputNameValue]]"> </oj-bind-text>
+  <oj-bind-text value="[[inputSurnameValue]]"> </oj-bind-text>
+  <oj-bind-text value="[[inputBirthdayValue]]"> </oj-bind-text>
+  <oj-bind-text value="[[inputGenderValue]]"> </oj-bind-text>
+  <oj-bind-text value="[[inputBirthplaceValue]]"> </oj-bind-text>
+  <oj-bind-text value="[[inputAgeValue]]"> </oj-bind-text>
 </div>
-</oj-form-layout>
+<!--
+  tabela
+-->
+<div>
+  <h2>Table about informations</h2>
 
-
-
-</div>
-  <div>
-    <oj-bind-text
-    value="[[inputNameValue]]">
-    </oj-bind-text>
-    <oj-bind-text
-    value="[[inputSurnameValue]]">
-    </oj-bind-text>
-    <oj-bind-text
-    value="[[inputGenderValue]]">
-    </oj-bind-text>
-    <oj-bind-text
-    value="[[inputBirthplaceValue]]">
-    </oj-bind-text>
-    <oj-bind-text
-    value="[[inputAgeValue]]">
-    </oj-bind-text>
-
+    <div id="componentDemoContent" style="width: 1px; min-width: 100%">
+      <oj-table
+        id="table"
+        aria-label="Tabeleklienti"
+        columns-default.sortable="enabled"
+        data="[[dataprovider]]"
+        columns='[{"headerText": "emri", 
+              "field": "emri",
+                "id":"emri"},
+              {"headerText": "mbiemer", 
+              "field": "mbiemri",
+              "id":"mbiemri"},
+              {"headerText": "ditelindja", 
+              "field": "ditelindja",
+              "id":"ditelindja"},
+              {"headerText": "gjinia", 
+              "field": "gjinia",
+              "id":"gjinia"},
+              {"headerText": "vendlindja", 
+              "field": "vendlindja",
+              "id":"vendlindja"},
+              {"headerText": "mosha", 
+                "field": "mosha",
+                "id":"mosha"}]'
+            selection-mode.row="single"
+            first-selected-row="{{firstSelected}}"
+        style="width: 100%">
+      </oj-table>
+    </div>
   </div>
 
+  <!--
+    Pie Chart
+  -->
+  <div>
+    <h2>Pie Chart about gender</h2>
+    </div>
+    <oj-chart
+    id="pieChart"
+    type="pie"
+    data="[[genderDataProvider]]"
+    animation-on-display="auto"
+    animation-on-data-change="auto"
+    hover-behavior="dim">
+    <template slot="itemTemplate" data-oj-as="item" id="pieChartItem">
+      <oj-chart-item
+        value="[[item.data.value]]"
+        group-id="[[[item.data.group ]]]"
+        series-id="[[item.data.series]]"></oj-chart-item>
+    </template>
+  </oj-chart>
 
-<div>
-  <div id="sampleDemo" class="demo-padding demo-container">
-    <div id="componentDemoContent" style="width: 1px; min-width: 100%;">
-  <oj-table id="table" aria-label='Tabeleklienti'
-  columns-default.sortable="disabled"
-data='[[dataprovider]]'
-columns='[{"headerText": "emri", 
-            "field": "emri",
-            "headerClassName": "oj-sm-only-hide",
-            "className": "oj-sm-only-hide",
-            "resizable": "enabled"},
-            {"headerText": "mbiemer", 
-            "field": "mbiemri",
-            "resizable": "enabled"},
-            {"headerText": "ditelindja", 
-            "field": "ditelindja",
-            "headerClassName": "oj-sm-only-hide",
-            "className": "oj-sm-only-hide",
-            "resizable": "enabled"},
-            {"headerText": "gjinia", 
-            "field": "gjinia",
-            "headerClassName": "oj-sm-only-hide",
-            "className": "oj-sm-only-hide",
-            "resizable": "enabled"},
-            {"headerText": "vendlindja", 
-            "field": "vendlindja",
-            "headerClassName": "oj-sm-only-hide",
-            "className": "oj-sm-only-hide",
-            "resizable": "enabled"},
-            {"headerText": "mosha", 
-              "field": "mosha",
-              "headerClassName": "oj-sm-only-hide",
-              "className": "oj-sm-only-hide",
-              "resizable": "enabled"}]'
-style="width: 100%;">
-</oj-table>
 
-</div>
+  </div>
