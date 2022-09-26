@@ -21,7 +21,10 @@ define([
   "ojs/ojselectsingle",
   "ojs/ojbutton",
   "ojs/ojtable",
-  "ojs/ojchart"
+  "ojs/ojchart",
+  djem = 0,
+  vajza = 0,
+  data=[]
   ],
     (ko,
       ArrayDataProvider,
@@ -39,38 +42,42 @@ define([
         ], {
           keyAttributes: "value",
         });
+
         this.inputNameValue = ko.observable();
         this.inputSurnameValue = ko.observable();
         this.inputBirthdayValue = ko.observable();
         this.inputAgeValue = ko.observable();
         this.inputBirthplaceValue = ko.observable();
         this.inputGenderValue = ko.observable();
+
         this.onCreateButtonClick = ko.observable();
         this.dataFromSave = ko.observableArray([]);
-        this.data=[];
-        this.dataFromGender = ko.observableArray([
-          {
-                "id": 0,
-                "series": "Djem",
-                "group": "Group A",
-                "value": 10
-              },
-              {
-                "id": 1,
-                "series": "Vajza",
-                "group": "Group A",
-                "value": 10
-              }
-            ]);
+
         this.dataprovider = new BufferingDataProvider(new ArrayDataProvider(this.dataFromSave));
-        this.genderDataProvider= ko.observableArray([]);
-        this.genderDataProvider=new ArrayDataProvider(this.dataFromGender);
+
+        data=[{
+          id: 0,
+          series: "Djem",
+          group: "Group A",
+          value: djem
+          },
+          {
+          id: 1,
+          series: "Vajza",
+          group: "Group A",
+          value: vajza
+        }
+        ];
+
+        var chartData = ko.observableArray(data);
+
+        this.genderDataProvider=new ArrayDataProvider(chartData, {
+          keyAttributes: "id"
+      });
         
-        var djem = 0;
 
-        var vajza = 0;
 
-        this.onCreateButtonClick = () => {
+      this.onCreateButtonClick = () => {
           
           let dataFromSaved = {
             emri: this.inputNameValue(),
@@ -88,7 +95,7 @@ define([
         this.dataprovider.addItem({
           metadata: { key: dataFromSaved.emri },
           data: dataFromSaved
-      });
+        });
 
       console.log(dataFromSaved);
 
@@ -100,28 +107,20 @@ define([
         vajza ++;
         console.log("vajza" + vajza);
       }
-      this.data.push({
-        "id": 0,
-        "series": "Djem",
-        "group": "Group A",
-        "value": djem
-      });
-      this.data.push(
-      {
-        "id": 1,
-        "series": "Vajza",
-        "group": "Group B",
-        "value": vajza
-      });
-      console.log(this.data);
 
-        this.genderDataProvider = new ArrayDataProvider(this.data,
-          {
-            keyAttributes: "id"});
-        console.log(this.genderDataProvider);
-    }    
-      }
+      console.log(data);
 
+      data[0].value=djem;
+
+      data[1].value=vajza;
+
+      chartData(data);
+      
+      this.genderDataProvider= new ArrayDataProvider(chartData, {
+        keyAttributes: "id"
+      });
+    }
+  }
         return CustomerViewModel;
       }
   );
